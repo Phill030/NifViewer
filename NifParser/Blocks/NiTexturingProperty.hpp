@@ -16,7 +16,7 @@ public:
 	uint16_t flags;
 	uint32_t numTextures;
 	bool hasBaseTexture;
-	vector<TexDesc> baseTextures;
+	TexDesc baseTexture;
 	bool hasDarkTexture;
 	bool hasDetailTexture;
 	bool hasGlossTexture;
@@ -27,16 +27,14 @@ public:
 	uint32_t numShaderTextures;
 	vector<ShaderTexDesc> shaderTextures;
 
-	NiTexturingProperty(Reader* reader, const NifHeader& header) : NiProperty(reader, header) {
-		flags = reader->read<uint16_t>();
-		
-		numTextures = reader->read<uint32_t>();
-		hasBaseTexture = reader->read<bool>();
-		baseTextures.reserve(numTextures);
-		for (uint32_t i = 0; i < numTextures; i++) {
-			baseTextures.push_back(TexDesc(reader, header));
-		}
-
+	NiTexturingProperty(Reader* reader, const NifHeader& header)
+		: NiProperty(reader, header), flags(reader->read<uint16_t>()),
+			numTextures(reader->read<uint32_t>()), hasBaseTexture(reader->read<bool>()),
+		baseTexture(TexDesc(reader, header)) {
+		//flags = reader->read<uint16_t>();
+		//numTextures = reader->read<uint32_t>();
+		//hasBaseTexture = reader->read<bool>();
+		//baseTexture = TexDesc(reader, header);
 		hasDarkTexture = reader->read<bool>();
 		hasDetailTexture = reader->read<bool>();
 		hasGlossTexture = reader->read<bool>();
