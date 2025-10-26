@@ -55,8 +55,6 @@ add_executable (Revive101
     "Reader.hpp"
     "NifParser/Nif.cpp"
     "NifParser/Nif.hpp"
-    "NifParser/Blocks/NiBlock.hpp"
-    "NifParser/Blocks/NiNode.hpp"
  )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
