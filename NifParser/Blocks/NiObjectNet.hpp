@@ -21,8 +21,9 @@ public:
 	NiObjectNet(Reader* reader, const NifHeader& header) {
 		name = header.getIndexString(reader);
 
-		extraData.reserve(reader->read<uint32_t>());
-		for (int j = 0; j < extraData.capacity(); j++) {
+		uint32_t numExtraData = reader->read<uint32_t>();
+		extraData.reserve(numExtraData);
+		for (int j = 0; j < numExtraData; j++) {
 			extraData.push_back(Ref<NiExtraData>(reader));
 		}
 

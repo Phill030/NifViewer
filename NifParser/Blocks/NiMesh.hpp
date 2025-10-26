@@ -29,7 +29,7 @@ public:
     uint32_t numDataStreams;
     vector<DataStreamRef> dataStreams;
     uint32_t numModifiers;
-    int32_t modifiers;
+    vector<int32_t> modifiers;
 
     NiMesh(Reader* reader, const NifHeader& header) : NiAvObject(reader, header) {
 		materialData = MaterialData(reader, header);
@@ -43,6 +43,9 @@ public:
             dataStreams.push_back(DataStreamRef(reader, header));
 		}
 		numModifiers = reader->read<uint32_t>();
-		modifiers = reader->read<int32_t>();
+        modifiers.reserve(numModifiers);
+        for (int i = 0; i < numModifiers; i++) {
+            modifiers.push_back(reader->read<int32_t>());
+        }
     }
 };

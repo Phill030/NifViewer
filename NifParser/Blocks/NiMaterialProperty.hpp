@@ -1,6 +1,8 @@
 #pragma once
 #include "NiProperty.hpp"
 #include "../../Types/Color3.hpp"
+#include "../NifHeader.hpp"
+#include "../../Reader.hpp"
 
 // Describes the surface properties of an object e.g. translucency, ambient color, diffuse color, emissive color, and specular color. 
 struct NiMaterialProperty : NiProperty
@@ -20,6 +22,7 @@ public:
 		emissiveColor = reader->read<Color3>();
 		glossiness = reader->read<float>();
 		alpha = reader->read<float>();
+
 	}
 
 	virtual ~NiMaterialProperty() = default;
