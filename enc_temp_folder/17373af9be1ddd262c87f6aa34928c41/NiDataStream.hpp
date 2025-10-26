@@ -9,6 +9,25 @@
 
 using namespace std;
 
+enum class DataStreamUsage : uint32_t
+{
+    VERTEX_INDEX = 0, // Vertex index usage
+    VERTEX = 1, // Vertex data usage
+    SHADER_CONSTANT = 2, // Shader constant usage
+    USER = 3  // User-defined usage
+};
+
+enum class DataStreamAccess : uint32_t
+{
+    CPU_READ = 0x00000001, // CPU read access
+    CPU_WRITE_STATIC = 0x00000002, // CPU write (static)
+    CPU_WRITE_MUTABLE = 0x00000004, // CPU write (mutable)
+    CPU_WRITE_VOLATILE = 0x00000008, // CPU write (volatile)
+    GPU_READ = 0x00000010, // GPU read access
+    GPU_WRITE = 0x00000020, // GPU write access
+    CPU_WRITE_STATIC_INITIALIZED = 0x00000040 // CPU write static (initialized)
+};
+
 enum class CloningBehavior : uint32_t
 {
     CLONING_SHARE = 0, // Share this object pointer with the newly cloned scene
@@ -135,6 +154,8 @@ public:
 struct NiDataStream : NiObject
 {
 public:
+    DataStreamUsage usage;
+    DataStreamAccess access;
     uint32_t numBytes;
     CloningBehavior cloningBehavior;
     uint32_t numRegions;
@@ -146,6 +167,9 @@ public:
 
     NiDataStream(Reader* reader, NifHeader& header) {
         numBytes = reader->read<uint32_t>();
+        usage = static_cast<DataStreamUsage>(0); // WTF??????
+        access = static_cast<DataStreamAccess>(0); // WTF???????
+
 		cloningBehavior = static_cast<CloningBehavior>(reader->read<uint32_t>());
 		numRegions = reader->read<uint32_t>();
         regions.reserve(numRegions);
