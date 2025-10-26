@@ -23,7 +23,7 @@ string getReadableText(const std::string& input) {
     string result;
     for (unsigned char c : input) {
         if (!isprint(c))
-            break; // stop at first non-printable character
+            break;
         result += c;
     }
     return result;
@@ -69,6 +69,10 @@ NifFile::NifFile(vector<char>* data)
             blocks->push_back(node);
         }
         else if (blockType == "NiSourceTexture") {
+            shared_ptr<NiSourceTexture> node = make_shared<NiSourceTexture>(&reader, *header);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiAlphaProperty") {
             shared_ptr<NiSourceTexture> node = make_shared<NiSourceTexture>(&reader, *header);
             blocks->push_back(node);
         }
