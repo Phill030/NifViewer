@@ -1,16 +1,20 @@
 #pragma once
 #include "../../Reader.hpp"
+#include "../../Types/Ref.hpp"
+#include "../NifHeader.hpp"
 #include "NiObject.hpp"
+#include <cstdint>
+#include <string>
 #include <vector>
 
 using namespace std;
 
 enum class DataStreamUsage : uint32_t
 {
-    USAGE_VERTEX_INDEX = 0, // Vertex index usage
-    USAGE_VERTEX = 1, // Vertex data usage
-    USAGE_SHADER_CONSTANT = 2, // Shader constant usage
-    USAGE_USER = 3  // User-defined usage
+    VERTEX_INDEX = 0, // Vertex index usage
+    VERTEX = 1, // Vertex data usage
+    SHADER_CONSTANT = 2, // Shader constant usage
+    USER = 3  // User-defined usage
 };
 
 enum class DataStreamAccess : uint32_t
@@ -147,19 +151,54 @@ public:
 	}
 };
 
+struct NiDataStream : NiObject
+{
+public:
+    DataStreamUsage usage;
+    DataStreamAccess access;
+    uint32_t numBytes;
+	CloningBehavior cloningBehavior;
+    uint32_t numRegions;
+	vector<Region> regions;
+    uint32_t numComponents;
+	vector<ComponentFormat> componentFormats;
+    vector<uint8_t> data;
+    bool streamable;
+
+    NiDataStream(Reader* reader, NifHeader& header) {
+		usage = static_cast<DataStreamUsage>(reader->read<uint32_t>());
+        access = static_cast<DataStreamAccess>(reader->read<uint32_t>());
+		numBytes = reader->read<uint32_t>();
+		data.reserve(numBytes); // ??
+		cloningBehavior = static_cast<CloningBehavior>(reader->read<uint32_t>());
+		numRegions = reader->read<uint32_t>();
+        regions.reserve(numRegions);
+        for (int i = 0; i < numRegions; i++) {
+            regions.push_back(Region(reader, header));
+        }
+		numComponents = reader->read<uint32_t>();
+        componentFormats.reserve(numComponents);
+        for (int i = 0; i < numComponents; i++) {
+            componentFormats.push_back(static_cast<ComponentFormat>(reader->read<uint32_t>()));
+		}
+        for (int i = 0; i < numBytes; i++) {
+            data.push_back(reader->read<uint8_t>());
+        }
+		streamable = reader->read<bool>();
+    }
+};
+
 struct DataStreamRef
 {
 public:
-	int32_t stream; // Refernce to a NiDataStream
+	Ref<NiDataStream> stream; // Reference to a NiDataStream
     bool isPerInstance; // Sets whether this stream data is per-instance data for use in hardware instancing.
     uint16_t numSubmeshes; // The number of submesh-to-region mappings that this data stream has.
 	vector<uint16_t> submeshToRegionMap;
     uint32_t numComponents;
     vector<SemanticData> componentSemantics;
 
-	DataStreamRef() = default;
-    DataStreamRef(Reader* reader, const NifHeader& header) {
-		stream = reader->read<uint32_t>();
+    DataStreamRef(Reader* reader, const NifHeader& header) : stream(Ref<NiDataStream>(reader)) {
         isPerInstance = reader->read<bool>();
 
         numSubmeshes = reader->read<uint16_t>();

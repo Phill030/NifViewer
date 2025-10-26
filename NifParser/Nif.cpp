@@ -14,15 +14,26 @@
 #include "Blocks/NiTexturingProperty.hpp"
 #include "Blocks/NiStringExtraData.hpp"
 #include "Blocks/NiMaterialProperty.hpp"
+#include "Blocks/NiDataStream.hpp"
 
 using namespace std;
+
+string getReadableText(const std::string& input) {
+    string result;
+    for (unsigned char c : input) {
+        if (!isprint(c))
+            break; // stop at first non-printable character
+        result += c;
+    }
+    return result;
+}
 
 NifFile::NifFile(vector<char>* data)
     : reader(data), header(NifHeader(&reader)) {
     blocks = vector<shared_ptr<NiObject>>();
 
     for (uint32_t i = 0; i < header->numBlocks; i++) {
-        string blockType = header->blockTypes[header->blockTypeIndex[i]];
+        string blockType = getReadableText(header->blockTypes[header->blockTypeIndex[i]]);
         uint32_t blockSize = header->blockSize[i];
 
         if (blockType == "NiNode") {
@@ -50,6 +61,10 @@ NifFile::NifFile(vector<char>* data)
         }
         else if (blockType == "NiMaterialProperty") {
             shared_ptr<NiMaterialProperty> node = make_shared<NiMaterialProperty>(&reader, *header);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiDataStream") {
+            shared_ptr<NiDataStream> node = make_shared<NiDataStream>(&reader, *header);
             blocks->push_back(node);
         }
         else {
