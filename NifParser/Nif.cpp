@@ -15,6 +15,7 @@
 #include "Blocks/NiStringExtraData.hpp"
 #include "Blocks/NiMaterialProperty.hpp"
 #include "Blocks/NiDataStream.hpp"
+#include "Blocks/NiSourceTexture.hpp"
 
 using namespace std;
 
@@ -65,6 +66,10 @@ NifFile::NifFile(vector<char>* data)
         }
         else if (blockType == "NiDataStream") {
             shared_ptr<NiDataStream> node = make_shared<NiDataStream>(&reader, *header);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiSourceTexture") {
+            shared_ptr<NiSourceTexture> node = make_shared<NiSourceTexture>(&reader, *header);
             blocks->push_back(node);
         }
         else {
