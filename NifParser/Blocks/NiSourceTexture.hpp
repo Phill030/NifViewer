@@ -13,13 +13,13 @@ struct NiSourceTexture : NiTexture
 public:
 	uint8_t useExternal;
 	string filePath;
-	int32_t unknownLink;
+	int32_t unknownLink; // Ref<NiObject>
 	FormatPrefs formatPrefs;
 	uint8_t isStatic;
 	bool directRender;
 	bool persistRenderData;
 
-	NiSourceTexture(Reader* reader, const NifHeader& header) : NiTexture(reader, header) {
+	NiSourceTexture(Reader* reader, const NifHeader& header): NiTexture(reader, header) {
 		useExternal = reader->read<uint8_t>();
 		filePath = header.getIndexString(reader);
 		unknownLink = reader->read<int32_t>();
