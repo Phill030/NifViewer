@@ -29,12 +29,8 @@ public:
 
 	NiTexturingProperty(Reader* reader, const NifHeader& header)
 		: NiProperty(reader, header), flags(reader->read<uint16_t>()),
-			numTextures(reader->read<uint32_t>()), hasBaseTexture(reader->read<bool>()),
+		numTextures(reader->read<uint32_t>()), hasBaseTexture(reader->read<bool>()),
 		baseTexture(TexDesc(reader, header)) {
-		//flags = reader->read<uint16_t>();
-		//numTextures = reader->read<uint32_t>();
-		//hasBaseTexture = reader->read<bool>();
-		//baseTexture = TexDesc(reader, header);
 		hasDarkTexture = reader->read<bool>();
 		hasDetailTexture = reader->read<bool>();
 		hasGlossTexture = reader->read<bool>();
