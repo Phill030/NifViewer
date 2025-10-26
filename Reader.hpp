@@ -8,6 +8,7 @@
 #include <cstddef>
 #include "Types/Vector3.hpp"
 #include "Types/Matrix33.hpp"
+#include "Types/Color3.hpp"
 
 class Reader {
 public:
@@ -59,4 +60,12 @@ inline Matrix33 Reader::read<Matrix33>() {
         }
     }
     return m;
+}
+template<>
+inline Color3 Reader::read<Color3>() {
+    Color3 c;
+    c.r = read<float>();
+    c.g = read<float>();
+    c.b = read<float>();
+	return c;
 }

@@ -7,7 +7,7 @@
 struct NiExtraData : NiObject
 {
 public:
-	std::string name;
+	std::string name; // Name of this object
 	NiExtraData(Reader* reader, const NifHeader& header) {
 		name = header.getIndexString(reader);
 	}

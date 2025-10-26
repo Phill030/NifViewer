@@ -14,4 +14,5 @@ using namespace std;
 struct NiProperty : NiObjectNet
 {
 	NiProperty(Reader* reader, const NifHeader& header) : NiObjectNet(reader, header) {}
+	virtual ~NiProperty() = default;
 };
