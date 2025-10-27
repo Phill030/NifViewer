@@ -105,10 +105,10 @@ NifFile::NifFile(const std::vector<char>& data): reader(data), header(reader) {
             shared_ptr<NiFloatInterpolator> node = make_shared<NiFloatInterpolator>(reader);
             blocks.push_back(node);
         }
-        //else if (blockType == "NiFloatData") {
-        //    shared_ptr<NiFloatData> node = make_shared<NiFloatData>(reader);
-        //    blocks.push_back(node);
-        //}
+        else if (blockType == "NiFloatData") {
+            shared_ptr<NiFloatData> node = make_shared<NiFloatData>(reader);
+            blocks.push_back(node);
+        }
         else if (blockType == "NiMorphWeightsController") {
             shared_ptr<NiMorphWeightsController> node = make_shared<NiMorphWeightsController>(reader, header);
             blocks.push_back(node);
