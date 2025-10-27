@@ -17,13 +17,13 @@ private:
 	Reader reader;
 
 public:
-    optional<NifHeader> header;
-    optional<vector<shared_ptr<NiObject>>> blocks;
+    NifHeader header;
+    vector<shared_ptr<NiObject>> blocks;
     
-    NifFile(): reader(nullptr) {}
-
-    NifFile(vector<char>* data);
-    NifFile(const NifFile&) = default;
-    NifFile& operator=(const NifFile&) = default;
+    explicit NifFile(const std::vector<char>& data);
+    NifFile(const NifFile&) = delete;
+    NifFile& operator=(const NifFile&) = delete;
+    NifFile& operator=(NifFile&&) = default;
+    NifFile(NifFile&&) = default;
 };
 

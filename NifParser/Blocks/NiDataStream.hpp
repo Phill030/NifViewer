@@ -113,9 +113,9 @@ public:
     uint32_t index;
 
 	SemanticData() = default;
-    SemanticData(Reader* reader, const NifHeader& header) {
+    SemanticData(Reader& reader, const NifHeader& header) {
         name = header.getIndexString(reader);
-        index = reader->read<uint32_t>();
+        index = reader.read<uint32_t>();
     }
 };
 
@@ -126,9 +126,9 @@ public:
 	uint32_t numIndices;
 
     Region() = default;
-    Region(Reader* reader, const NifHeader& header) {
-        startIndex = reader->read<uint32_t>();
-        numIndices = reader->read<uint32_t>();
+    Region(Reader& reader, const NifHeader& header) {
+        startIndex = reader.read<uint32_t>();
+        numIndices = reader.read<uint32_t>();
 	}
 };
 
@@ -144,25 +144,23 @@ public:
     vector<uint8_t> data;
     bool streamable;
 
-    NiDataStream(Reader* reader, NifHeader& header) {
-        numBytes = reader->read<uint32_t>();
-		cloningBehavior = static_cast<CloningBehavior>(reader->read<uint32_t>());
-		numRegions = reader->read<uint32_t>();
+    NiDataStream(Reader& reader, NifHeader& header) {
+        numBytes = reader.read<uint32_t>();
+		cloningBehavior = static_cast<CloningBehavior>(reader.read<uint32_t>());
+		numRegions = reader.read<uint32_t>();
         regions.reserve(numRegions);
         for (int i = 0; i < numRegions; i++) {
             regions.push_back(Region(reader, header));
         }
-		numComponents = reader->read<uint32_t>();
+		numComponents = reader.read<uint32_t>();
         componentFormats.reserve(numComponents);
         for (int i = 0; i < numComponents; i++) {
-            componentFormats.push_back(static_cast<ComponentFormat>(reader->read<uint32_t>()));
+            componentFormats.push_back(static_cast<ComponentFormat>(reader.read<uint32_t>()));
 		}
 
-        for (int i = 0; i < numBytes; i++) {
-            data.push_back(reader->read<uint8_t>());
-        }
+        data = reader.read(numBytes); // Use your existing read(length) method
 
-		streamable = reader->read<bool>();
+		streamable = reader.read<bool>();
     }
 };
 
@@ -176,16 +174,16 @@ public:
     uint32_t numComponents;
     vector<SemanticData> componentSemantics;
 
-    DataStreamRef(Reader* reader, const NifHeader& header) : stream(Ref<NiDataStream>(reader)) {
-        isPerInstance = reader->read<bool>();
+    DataStreamRef(Reader& reader, const NifHeader& header) : stream(Ref<NiDataStream>(reader)) {
+        isPerInstance = reader.read<bool>();
 
-        numSubmeshes = reader->read<uint16_t>();
+        numSubmeshes = reader.read<uint16_t>();
 		submeshToRegionMap.reserve(numSubmeshes);
 		for (int i = 0; i < numSubmeshes; i++) {
-			submeshToRegionMap.push_back(reader->read<uint16_t>());
+			submeshToRegionMap.push_back(reader.read<uint16_t>());
 		}
 
-        numComponents = reader->read<uint32_t>();
+        numComponents = reader.read<uint32_t>();
 		componentSemantics.reserve(numComponents);
         for (int i = 0; i < numComponents; i++) {
             componentSemantics.push_back(SemanticData(reader, header));

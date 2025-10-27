@@ -31,21 +31,21 @@ public:
     uint32_t numModifiers;
     vector<int32_t> modifiers;
 
-    NiMesh(Reader* reader, const NifHeader& header) : NiAvObject(reader, header) {
+    NiMesh(Reader& reader, const NifHeader& header) : NiAvObject(reader, header) {
 		materialData = MaterialData(reader, header);
-        primitiveType = static_cast<MeshPrimitiveType>(reader->read<uint32_t>());
-		numSubmeshes = reader->read<uint16_t>();
-        instancingEnabled = reader->read<bool>();
+        primitiveType = static_cast<MeshPrimitiveType>(reader.read<uint32_t>());
+		numSubmeshes = reader.read<uint16_t>();
+        instancingEnabled = reader.read<bool>();
 		bound = NiBound(reader, header);
-        numDataStreams = reader->read<uint32_t>();
+        numDataStreams = reader.read<uint32_t>();
 		dataStreams.reserve(numDataStreams);
         for (int i = 0; i < numDataStreams; i++) {
             dataStreams.push_back(DataStreamRef(reader, header));
 		}
-		numModifiers = reader->read<uint32_t>();
+		numModifiers = reader.read<uint32_t>();
         modifiers.reserve(numModifiers);
         for (int i = 0; i < numModifiers; i++) {
-            modifiers.push_back(reader->read<int32_t>());
+            modifiers.push_back(reader.read<int32_t>());
         }
     }
 };

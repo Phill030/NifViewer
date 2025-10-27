@@ -8,8 +8,8 @@ public:
 	float radius; // The sphere's radius.
 
 	NiBound() = default;
-	NiBound(Reader* reader, const NifHeader& header) {
-		center = reader->read<Vector3>();
-		radius = reader->read<float>();
+	NiBound(Reader& reader, const NifHeader& header) {
+		center = reader.read<Vector3>();
+		radius = reader.read<float>();
 	}
 };

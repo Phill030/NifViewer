@@ -36,8 +36,8 @@ public:
 	vector<string> strings;
 	vector<uint32_t> groups;
 
-	Version readVersion(Reader* reader) const {
-		uint32_t ver = reader->read<uint32_t>();
+	Version readVersion(Reader& reader) const {
+		uint32_t ver = reader.read<uint32_t>();
 		Version v;
 		v.major = (ver >> 24) & 0xFF;
 		v.minor = (ver >> 16) & 0xFF;
@@ -46,8 +46,8 @@ public:
 		return v;
 	}
 
-	string getIndexString(Reader* reader) const {
-		int32_t stringIndex = reader->read<int32_t>();
+	string getIndexString(Reader& reader) const {
+		int32_t stringIndex = reader.read<int32_t>();
 		if (stringIndex == 0xFFFFFFFF) {
 			return "";
 		}
@@ -56,39 +56,39 @@ public:
 	}
 
 	NifHeader() = default;
-	NifHeader(Reader* reader) {
-		header = reader->readUntilNull();
+	NifHeader(Reader& reader) {
+		header = reader.readUntilNull();
 		version = readVersion(reader);
-		endiannes = reader->read<uint8_t>();
-		userVersion = reader->read<uint32_t>();
-		numBlocks = reader->read<uint32_t>();
-		numBlockTypes = reader->read<uint16_t>();
+		endiannes = reader.read<uint8_t>();
+		userVersion = reader.read<uint32_t>();
+		numBlocks = reader.read<uint32_t>();
+		numBlockTypes = reader.read<uint16_t>();
 		blockTypes.reserve(numBlockTypes);
 		blockTypeIndex.reserve(numBlocks);
 		blockSize.reserve(numBlocks);
 		
 		for (int i = 0; i < numBlockTypes; i++) {
-			string name = reader->readString();
+			string name = reader.readString();
 			blockTypes.push_back(name);
 		}
 		
 		for (int i = 0; i < numBlocks; i++) {
-			blockTypeIndex.push_back(reader->read<uint16_t>());
+			blockTypeIndex.push_back(reader.read<uint16_t>());
 		}
 
 		for (int i = 0; i < numBlocks; i++) {
-			blockSize.push_back(reader->read<uint32_t>());
+			blockSize.push_back(reader.read<uint32_t>());
 		}
 
-		strings.reserve(reader->read<uint32_t>());
-		maxStringLength = reader->read<uint32_t>();
+		strings.reserve(reader.read<uint32_t>());
+		maxStringLength = reader.read<uint32_t>();
 		for (int i = 0; i < strings.capacity(); i++) {
-			strings.push_back(reader->readString());
+			strings.push_back(reader.readString());
 		}
 
-		groups.reserve(reader->read<uint32_t>());
+		groups.reserve(reader.read<uint32_t>());
 		for (int i = 0; i < groups.capacity(); i++) {
-			groups.push_back(reader->read<uint32_t>());
+			groups.push_back(reader.read<uint32_t>());
 		}
 	}
 };

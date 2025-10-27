@@ -13,6 +13,6 @@ using namespace std;
 // Subclasses are attached to NiAVObjects to control their rendering.
 struct NiProperty : NiObjectNet
 {
-	NiProperty(Reader* reader, const NifHeader& header) : NiObjectNet(reader, header) {}
+	NiProperty(Reader& reader, const NifHeader& header) : NiObjectNet(reader, header) {}
 	virtual ~NiProperty() = default;
 };

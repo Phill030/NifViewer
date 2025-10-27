@@ -29,8 +29,8 @@ private:
     uint16_t flags = 0;
 
 public:
-    NiZBufferProperty(Reader* reader, const NifHeader& header): NiProperty(reader, header) {
-		flags = reader->read<uint16_t>();
+    NiZBufferProperty(Reader& reader, const NifHeader& header): NiProperty(reader, header) {
+		flags = reader.read<uint16_t>();
     }
 
     ZBufferFlags GetFlags() const {

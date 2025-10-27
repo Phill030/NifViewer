@@ -7,6 +7,6 @@ struct NiSingleInterpController : NiInterpController
 {
 public:
 	Ref<NiInterpolator> interpolator;
-	NiSingleInterpController(Reader* reader) : NiInterpController(reader),
+	NiSingleInterpController(Reader& reader) : NiInterpController(reader),
 		interpolator(Ref<NiInterpolator>(reader)) {}
 };

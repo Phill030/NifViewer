@@ -4,5 +4,4 @@
 struct NiObject
 {
 	virtual ~NiObject() = default;
-
 };

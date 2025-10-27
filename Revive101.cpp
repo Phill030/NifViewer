@@ -114,7 +114,7 @@ bool showSaveFileDialog(const string& defaultName, const vector<char>& content) 
 
 
 static vector<char> openedFileData;
-static NifFile nif;
+static optional<NifFile> nif;
 static string openedFileName;
 static bool showFileWindow = false;
 
@@ -157,7 +157,7 @@ void DrawFileNode(KiWadHandler& handler, const vector<KiWadEntry>& entries, ImGu
         if (ImGui::TreeNodeEx(filename.c_str(), baseFlags | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen)) {
             if (ImGui::IsItemClicked()) {
                 openedFileData = handler.getFileData(e);
-				nif = NifFile(&openedFileData);
+				nif = NifFile(openedFileData);
                 openedFileName = filename;
                 showFileWindow = true;
             }
@@ -250,15 +250,9 @@ int main() {
         // Render everything in another window
         ImGui::Begin("File Viewer: ", &showFileWindow);
 
-        if (!openedFileData.empty() && nif.header.has_value()) {
+        if (nif) {
             ImGui::Text(openedFileName.c_str());
-            ImGui::Text("NIF Version: %s", nif.header.value().version.toString().c_str());
-
-            for (auto& obj : *nif.blocks) {
-                if (auto node = dynamic_pointer_cast<NiNode>(obj)) {
-					ImGui::Text("NiNode: %s", node->name.c_str());
-                }
-            }
+            ImGui::Text("NIF Version: %s", nif.value().header.version.toString().c_str());
         }
 
         ImGui::End();

@@ -5,8 +5,6 @@
 
 using namespace std;
 
-Reader::Reader(const vector<char>* data) : data(data), pos(0) {}
-
 string Reader::readString(size_t length) {
     if (pos + length > data->size())
         throw out_of_range("Read past end of buffer");
@@ -33,10 +31,10 @@ string Reader::readUntilNull() {
     return s;
 }
 
-vector<char> Reader::read(uint32_t length) {
+vector<uint8_t> Reader::read(uint32_t length) {
     if (pos + length > data->size())
         throw out_of_range("Read past end of buffer");
-    vector<char> buf(data->data() + pos, data->data() + pos + length);
+    vector<uint8_t> buf(data->data() + pos, data->data() + pos + length);
     pos += length;
     return buf;
 }

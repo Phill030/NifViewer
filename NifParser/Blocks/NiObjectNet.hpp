@@ -18,15 +18,15 @@ public:
 	vector<Ref<NiExtraData>> extraData;
 	int32_t controller; // TODO: Make Ref<NiTimeController>
 
-	NiObjectNet(Reader* reader, const NifHeader& header) {
+	NiObjectNet(Reader& reader, const NifHeader& header) {
 		name = header.getIndexString(reader);
 
-		uint32_t numExtraData = reader->read<uint32_t>();
+		uint32_t numExtraData = reader.read<uint32_t>();
 		extraData.reserve(numExtraData);
 		for (int j = 0; j < numExtraData; j++) {
 			extraData.push_back(Ref<NiExtraData>(reader));
 		}
 
-		controller = reader->read<int32_t>();
+		controller = reader.read<int32_t>();
 	}
 };

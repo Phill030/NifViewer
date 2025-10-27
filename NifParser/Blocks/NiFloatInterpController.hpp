@@ -4,5 +4,5 @@
 struct NiFloatInterpController : NiSingleInterpController
 {
 public:
-	NiFloatInterpController(Reader* reader) : NiSingleInterpController(reader) {}
+	NiFloatInterpController(Reader& reader) : NiSingleInterpController(reader) {}
 };

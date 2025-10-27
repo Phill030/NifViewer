@@ -14,8 +14,8 @@ class Ref
 public:
     int32_t value;
 
-    explicit Ref(Reader* reader) {
-        value = reader->read<int32_t>();
+    explicit Ref(Reader& reader) {
+        value = reader.read<int32_t>();
     }
 
     T* getReference(NifFile& file) const {
@@ -24,10 +24,10 @@ public:
         if (value == -1)
             return nullptr;
 
-        if (value < 0 || static_cast<size_t>(value) >= file.blocks.value().size())
+        if (value < 0 || static_cast<size_t>(value) >= file.blocks.size())
             return nullptr;
 
-        return dynamic_cast<T*>(file.blocks.value()[value]);
+        return dynamic_cast<T*>(file.blocks[value].get());
     }
 
     bool hasReference() const {

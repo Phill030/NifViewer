@@ -15,13 +15,13 @@ public:
 	float glossiness;
 	float alpha;
 
-	NiMaterialProperty(Reader* reader, const NifHeader& header) : NiProperty(reader, header) {
-		ambientColor = reader->read<Color3>();
-		diffuseColor = reader->read<Color3>();
-		specularColor = reader->read<Color3>();
-		emissiveColor = reader->read<Color3>();
-		glossiness = reader->read<float>();
-		alpha = reader->read<float>();
+	NiMaterialProperty(Reader& reader, const NifHeader& header) : NiProperty(reader, header) {
+		ambientColor = reader.read<Color3>();
+		diffuseColor = reader.read<Color3>();
+		specularColor = reader.read<Color3>();
+		emissiveColor = reader.read<Color3>();
+		glossiness = reader.read<float>();
+		alpha = reader.read<float>();
 
 	}
 

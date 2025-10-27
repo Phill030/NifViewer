@@ -8,7 +8,7 @@ struct NiFloatInterpolator : NiKeyBasedInterpolator
 public:
 	float value; // Pose value if lacking NiFloatData.
 	Ref<NiFloatData> data;
-	NiFloatInterpolator(Reader* reader) : NiKeyBasedInterpolator(),
-		value(reader->read<float>()),
+	NiFloatInterpolator(Reader& reader) : NiKeyBasedInterpolator(),
+		value(reader.read<float>()),
 		data(Ref<NiFloatData>(reader)) {}
 };

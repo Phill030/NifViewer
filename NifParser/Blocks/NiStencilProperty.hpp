@@ -20,9 +20,9 @@ public:
 	uint16_t flags;
 	uint32_t stencilRef;
 	uint32_t stencilMask; // A bit mask. The default is 0xffffffff.
-	NiStencilProperty(Reader* reader, const NifHeader& header): NiProperty(reader, header) {
-		flags = reader->read<uint16_t>();
-		stencilRef = reader->read<uint32_t>();
-		stencilMask = reader->read<uint32_t>();
+	NiStencilProperty(Reader& reader, const NifHeader& header): NiProperty(reader, header) {
+		flags = reader.read<uint16_t>();
+		stencilRef = reader.read<uint32_t>();
+		stencilMask = reader.read<uint32_t>();
 	}
 };

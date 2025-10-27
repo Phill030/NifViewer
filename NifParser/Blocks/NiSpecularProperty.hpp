@@ -8,7 +8,7 @@ struct NiSpecularProperty : NiProperty
 {
 public:
 	uint16_t flags;
-	NiSpecularProperty(Reader* reader, const NifHeader& header): NiProperty(reader, header) {
-		flags = reader->read<uint16_t>();
+	NiSpecularProperty(Reader& reader, const NifHeader& header): NiProperty(reader, header) {
+		flags = reader.read<uint16_t>();
 	}
 };

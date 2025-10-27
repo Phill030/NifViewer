@@ -19,18 +19,18 @@ public:
 	bool materialNeedsUpdate;
 
 	MaterialData() = default;
-	MaterialData(Reader* reader, const NifHeader& header) {
-		numMaterials = reader->read<uint32_t>();
+	MaterialData(Reader& reader, const NifHeader& header) {
+		numMaterials = reader.read<uint32_t>();
 		materialNames.reserve(numMaterials);
 		for(int i = 0; i < numMaterials; i++) {
-			materialNames.push_back(header.strings[reader->read<int32_t>()]);
+			materialNames.push_back(header.strings[reader.read<int32_t>()]);
 		}
 
 		materialExtraData.reserve(numMaterials);
 		for (int i = 0; i < numMaterials; i++) {
-			materialExtraData.push_back(reader->read<int32_t>());
+			materialExtraData.push_back(reader.read<int32_t>());
 		}
-		activeMaterial = reader->read<int32_t>();
-		materialNeedsUpdate = reader->read<bool>();
+		activeMaterial = reader.read<int32_t>();
+		materialNeedsUpdate = reader.read<bool>();
 	}
 };

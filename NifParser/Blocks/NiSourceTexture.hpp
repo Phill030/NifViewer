@@ -19,13 +19,13 @@ public:
 	bool directRender;
 	bool persistRenderData;
 
-	NiSourceTexture(Reader* reader, const NifHeader& header): NiTexture(reader, header) {
-		useExternal = reader->read<uint8_t>();
+	NiSourceTexture(Reader& reader, const NifHeader& header): NiTexture(reader, header) {
+		useExternal = reader.read<uint8_t>();
 		filePath = header.getIndexString(reader);
-		unknownLink = reader->read<int32_t>();
+		unknownLink = reader.read<int32_t>();
 		formatPrefs = FormatPrefs(reader, header);
-		isStatic = reader->read<uint8_t>();
-		directRender = reader->read<bool>();
-		persistRenderData = reader->read<bool>();
+		isStatic = reader.read<uint8_t>();
+		directRender = reader.read<bool>();
+		persistRenderData = reader.read<bool>();
 	}
 };

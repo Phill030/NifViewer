@@ -2,10 +2,13 @@
 #include "Reader.hpp"
 #include <fstream>
 #include <stdexcept>
-#include <algorithm>
 #include <cstdio>
 #include <zlib.h>
 #include <utility>
+#include <cstdint>
+#include <string>
+#include <vector>
+#include "zconf.h"
 
 using namespace std;
 
@@ -66,9 +69,8 @@ bool KiWadHandler::processFile(const string& path) {
         throw runtime_error("Size is smaller than header");
 
     fileData = move(buffer);
-
-    Reader r(&fileData);
-    vector<char> readHeader = r.read(HEADER.size());
+    Reader r(fileData);
+    vector<uint8_t> readHeader = r.read(HEADER.size());
 	string headerStr(readHeader.begin(), readHeader.end());
 
 	if (headerStr != HEADER)
@@ -111,7 +113,7 @@ void KiWadFile::extractInfo(Reader& reader) {
 }
 
 vector<char> KiWadHandler::getFileData(KiWadEntry entry) {
-	vector<char> entryData = Reader(&fileData).readKiWadEntry(entry);
+	vector<char> entryData = Reader(fileData).readKiWadEntry(entry);
     
     if (!entry.zipped)
         return entryData;

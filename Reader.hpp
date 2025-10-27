@@ -8,17 +8,18 @@
 #include <cstddef>
 #include "Types/Vector3.hpp"
 #include "Types/Matrix33.hpp"
+#include "Types/Matrix22.hpp"
 #include "Types/Color3.hpp"
 #include "Types/TexCoord.hpp"
 
 class Reader {
 public:
-    explicit Reader(const std::vector<char>* data);
+    explicit Reader(const vector<char>& data) : data(&data), pos(0) {}
 
     template<typename T>
     T read();
-    
-    std::vector<char> read(uint32_t length);
+
+    std::vector<uint8_t> read(uint32_t length);
     std::string readString(size_t length);
     std::string readString();
     std::string readUntilNull();
@@ -57,6 +58,17 @@ inline Matrix33 Reader::read<Matrix33>() {
     Matrix33 m;
     for (int r = 0; r < 3; r++) {
         for (int c = 0; c < 3; c++) {
+            m.m[r][c] = read<float>();
+        }
+    }
+    return m;
+}
+
+template<>
+inline Matrix22 Reader::read<Matrix22>() {
+    Matrix22 m;
+    for (int r = 0; r < 2; r++) {
+        for (int c = 0; c < 2; c++) {
             m.m[r][c] = read<float>();
         }
     }

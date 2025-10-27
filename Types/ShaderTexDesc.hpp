@@ -9,9 +9,9 @@ public:
 	TexDesc map;
 	uint32_t mapId;
 
-	ShaderTexDesc(Reader* reader, const NifHeader& header)
-		: hasMap(reader->read<bool>()),
+	ShaderTexDesc(Reader& reader, const NifHeader& header)
+		: hasMap(reader.read<bool>()),
 		map(reader, header),
-		mapId(reader->read<uint32_t>()) {
+		mapId(reader.read<uint32_t>()) {
 	}
 };

@@ -53,17 +53,17 @@ struct FormatPrefs
     AlphaFormat alphaFormat; // Requests no alpha, 1-bit alpha, or
 
     FormatPrefs() = default;
-    FormatPrefs(Reader* reader, const NifHeader& header) {
-        pixelLayout = static_cast<PixelLayout>(reader->read<uint32_t>());
-        useMipMaps = static_cast<MipMapFormat>(reader->read<uint32_t>());
-        alphaFormat = static_cast<AlphaFormat>(reader->read<uint32_t>());
+    FormatPrefs(Reader& reader, const NifHeader& header) {
+        pixelLayout = static_cast<PixelLayout>(reader.read<uint32_t>());
+        useMipMaps = static_cast<MipMapFormat>(reader.read<uint32_t>());
+        alphaFormat = static_cast<AlphaFormat>(reader.read<uint32_t>());
 	}
 };
 
 struct NiTexture : NiObjectNet
 {
     // Forwarding constructor so derived classes can initialize the NiObjectNet base.
-    NiTexture(Reader* reader, const NifHeader& header)
+    NiTexture(Reader& reader, const NifHeader& header)
         : NiObjectNet(reader, header) {
     }
 };

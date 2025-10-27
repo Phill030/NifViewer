@@ -33,8 +33,8 @@ private:
 	uint16_t flags;
 
 public:
-	NiVertexColorProperty(Reader* reader, const NifHeader& header) : NiProperty(reader, header) {
-		flags = reader->read<uint16_t>();
+	NiVertexColorProperty(Reader& reader, const NifHeader& header) : NiProperty(reader, header) {
+		flags = reader.read<uint16_t>();
 	}
 
 	VertexMode getVertexMode() const {

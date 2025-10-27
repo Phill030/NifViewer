@@ -22,12 +22,12 @@ public:
 	float rotation;
 	TransformMethod method;
 	TexCoord center;
-	TextureTransform(Reader* reader, const NifHeader& header) {
-		translation = reader->read<TexCoord>();
-		scale = reader->read<TexCoord>();
-		rotation = reader->read<float>();
-		method = static_cast<TransformMethod>(reader->read<uint32_t>());
-		center = reader->read<TexCoord>();
+	TextureTransform(Reader& reader, const NifHeader& header) {
+		translation = reader.read<TexCoord>();
+		scale = reader.read<TexCoord>();
+		rotation = reader.read<float>();
+		method = static_cast<TransformMethod>(reader.read<uint32_t>());
+		center = reader.read<TexCoord>();
 	}
 
 };
@@ -42,10 +42,10 @@ public:
 	bool hasTextureTransform;
 	optional<TextureTransform> textureTransform;
 
-	TexDesc(Reader* reader, const NifHeader& header) : source(Ref<NiSourceTexture>(reader)) {
-		flags = reader->read<uint16_t>();
-		maxAnisotropy = reader->read<uint16_t>();
-		hasTextureTransform = reader->read<bool>();
+	TexDesc(Reader& reader, const NifHeader& header) : source(Ref<NiSourceTexture>(reader)) {
+		flags = reader.read<uint16_t>();
+		maxAnisotropy = reader.read<uint16_t>();
+		hasTextureTransform = reader.read<bool>();
 		if (hasTextureTransform)
 			textureTransform = TextureTransform(reader, header);
 	}

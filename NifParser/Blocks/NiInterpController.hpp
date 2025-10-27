@@ -4,5 +4,5 @@
 struct NiInterpController : NiTimeController
 {
 	public:
-		NiInterpController(Reader* reader) : NiTimeController(reader) {}
+		NiInterpController(Reader& reader) : NiTimeController(reader) {}
 };
