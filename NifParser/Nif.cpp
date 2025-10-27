@@ -16,6 +16,7 @@
 #include "Blocks/NiMaterialProperty.hpp"
 #include "Blocks/NiDataStream.hpp"
 #include "Blocks/NiSourceTexture.hpp"
+#include "Blocks/NiAlphaProperty.hpp"
 
 using namespace std;
 
@@ -37,6 +38,7 @@ NifFile::NifFile(vector<char>* data)
         string blockType = getReadableText(header->blockTypes[header->blockTypeIndex[i]]);
         uint32_t blockSize = header->blockSize[i];
 
+		printf("Current index: %d, blockType: %s\n", i, blockType.c_str());
         if (blockType == "NiNode") {
             shared_ptr<NiNode> node = make_shared<NiNode>(&reader, *header);
             blocks->push_back(node);
@@ -73,7 +75,7 @@ NifFile::NifFile(vector<char>* data)
             blocks->push_back(node);
         }
         else if (blockType == "NiAlphaProperty") {
-            shared_ptr<NiSourceTexture> node = make_shared<NiSourceTexture>(&reader, *header);
+            shared_ptr<NiAlphaProperty> node = make_shared<NiAlphaProperty>(&reader, *header);
             blocks->push_back(node);
         }
         else {
