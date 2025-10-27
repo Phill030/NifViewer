@@ -13,7 +13,7 @@ struct NiSourceTexture : NiTexture
 public:
 	uint8_t useExternal;
 	string filePath;
-	int32_t unknownLink; // Ref<NiObject>
+	int32_t unknownLink; // Ref<NiObject>  possibly PixelData?
 	FormatPrefs formatPrefs;
 	uint8_t isStatic;
 	bool directRender;

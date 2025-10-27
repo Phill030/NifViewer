@@ -11,8 +11,6 @@ using namespace std;
 template <typename T>
 class Ref
 {
-    static_assert(is_base_of_v<NiObject, T>, "T must derive from NiObject");
-
 public:
     int32_t value;
 
@@ -21,6 +19,8 @@ public:
     }
 
     T* getReference(NifFile& file) const {
+        static_assert(is_base_of_v<NiObject, T>, "T must derive from NiObject");
+
         if (value == -1)
             return nullptr;
 

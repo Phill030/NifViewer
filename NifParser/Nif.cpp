@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <cctype>
 #include <cstdint>
 #include <cstdio>
 #include <memory>
@@ -17,6 +18,12 @@
 #include "Blocks/NiDataStream.hpp"
 #include "Blocks/NiSourceTexture.hpp"
 #include "Blocks/NiAlphaProperty.hpp"
+#include "Blocks/NiSpecularProperty.hpp"
+#include "Blocks/NiStencilProperty.hpp"
+#include "Blocks/NiTextureTransformController.hpp"
+#include "Blocks/NiFloatInterpolator.hpp"
+#include "Blocks/NiFloatData.hpp"
+#include "Blocks/NiMorphWeightsController.hpp"
 
 using namespace std;
 
@@ -78,8 +85,33 @@ NifFile::NifFile(vector<char>* data)
             shared_ptr<NiAlphaProperty> node = make_shared<NiAlphaProperty>(&reader, *header);
             blocks->push_back(node);
         }
+        else if (blockType == "NiSpecularProperty") {
+            shared_ptr<NiSpecularProperty> node = make_shared<NiSpecularProperty>(&reader, *header);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiStencilProperty") {
+            shared_ptr<NiStencilProperty> node = make_shared<NiStencilProperty>(&reader, *header);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiTextureTransformController") {
+            shared_ptr<NiTextureTransformController> node = make_shared<NiTextureTransformController>(&reader);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiFloatInterpolator") {
+            shared_ptr<NiFloatInterpolator> node = make_shared<NiFloatInterpolator>(&reader);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiFloatData") {
+            shared_ptr<NiFloatData> node = make_shared<NiFloatData>(&reader);
+            blocks->push_back(node);
+        }
+        else if (blockType == "NiMorphWeightsController") {
+            shared_ptr<NiMorphWeightsController> node = make_shared<NiMorphWeightsController>(&reader);
+            blocks->push_back(node);
+        }
         else {
             printf("Unknown block type: %s\n", blockType.c_str());
+			reader.read(blockSize);
         }
     }
 }

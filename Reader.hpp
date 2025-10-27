@@ -9,6 +9,7 @@
 #include "Types/Vector3.hpp"
 #include "Types/Matrix33.hpp"
 #include "Types/Color3.hpp"
+#include "Types/TexCoord.hpp"
 
 class Reader {
 public:
@@ -61,6 +62,7 @@ inline Matrix33 Reader::read<Matrix33>() {
     }
     return m;
 }
+
 template<>
 inline Color3 Reader::read<Color3>() {
     Color3 c;
@@ -68,4 +70,12 @@ inline Color3 Reader::read<Color3>() {
     c.g = read<float>();
     c.b = read<float>();
 	return c;
+}
+
+template<>
+inline TexCoord Reader::read<TexCoord>() {
+    TexCoord t;
+    t.u = read<float>();
+    t.v = read<float>();
+    return t;
 }
