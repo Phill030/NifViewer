@@ -6,6 +6,7 @@
 #include "TexCoord.hpp"
 #include <cstdint>
 
+#define ExcludeVersion(ver) if (header.version.toString() != ver)
 
 enum class TransformMethod : uint32_t
 {
@@ -47,10 +48,8 @@ public:
 	TexDesc(Reader& reader, const NifHeader& header) : source(Ref<NiSourceTexture>(reader)) {
 		flags = reader.read<uint16_t>();
 
-		if (header.version.toString() != "20.3.0.9") {
+		ExcludeVersion("20.3.0.9")
 			maxAnisotropy = reader.read<uint16_t>();
-		}
-
 
 		hasTextureTransform = reader.read<bool>();
 		if (hasTextureTransform)
