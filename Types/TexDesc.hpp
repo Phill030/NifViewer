@@ -37,6 +37,8 @@ struct TexDesc
 public:
 	Ref<NiSourceTexture> source; // Reference to a NiSourceTexture block
 	uint16_t flags;
+
+	// NOT IN VERSION 
 	uint16_t maxAnisotropy;
 
 	bool hasTextureTransform;
@@ -44,7 +46,11 @@ public:
 
 	TexDesc(Reader& reader, const NifHeader& header) : source(Ref<NiSourceTexture>(reader)) {
 		flags = reader.read<uint16_t>();
-		maxAnisotropy = reader.read<uint16_t>();
+
+		// TODO: what the fuck?
+		if(header.version.major != 20 && header.version.minor != 3 && header.version.patch != 0 && header.version.reserved != 9)
+			maxAnisotropy = reader.read<uint16_t>();
+
 		hasTextureTransform = reader.read<bool>();
 		if (hasTextureTransform)
 			textureTransform = TextureTransform(reader, header);

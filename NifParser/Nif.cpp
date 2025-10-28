@@ -28,6 +28,8 @@
 #include "Blocks/NiBooleanExtraData.hpp"
 #include "Blocks/NiIntegersExtraData.hpp"
 #include "Blocks/NiIntegerExtraData.hpp"
+#include "Blocks/NiTriShape.hpp"
+#include "Blocks/NiTriShapeData.hpp"
 
 using namespace std;
 
@@ -127,6 +129,14 @@ NifFile::NifFile(const std::vector<char>& data): reader(data), header(reader) {
         }
         else if (blockType == "NiIntegersExtraData") {
             shared_ptr<NiIntegersExtraData> node = make_shared<NiIntegersExtraData>(reader, header);
+            blocks.push_back(node);
+        }
+        else if (blockType == "NiTriShape") {
+            shared_ptr<NiTriShape> node = make_shared<NiTriShape>(reader, header);
+            blocks.push_back(node);
+        }
+        else if (blockType == "NiTriShapeData") {
+            shared_ptr<NiTriShapeData> node = make_shared<NiTriShapeData>(reader, header);
             blocks.push_back(node);
         }
         else {

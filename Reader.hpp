@@ -11,6 +11,8 @@
 #include "Types/Matrix22.hpp"
 #include "Types/Color3.hpp"
 #include "Types/TexCoord.hpp"
+#include "Types/Triangle.hpp"
+#include "Types/MatchGroup.hpp"
 
 class Reader {
 public:
@@ -90,4 +92,27 @@ inline TexCoord Reader::read<TexCoord>() {
     t.u = read<float>();
     t.v = read<float>();
     return t;
+}
+
+template<>
+inline Triangle Reader::read<Triangle>() {
+    Triangle t;
+    t.v1 = read<uint16_t>();
+    t.v2 = read<uint16_t>();
+    t.v3 = read<uint16_t>();
+    return t;
+}
+
+template<>
+inline MatchGroup Reader::read<MatchGroup>() {
+	uint16_t numVertices = read<uint16_t>();
+	vector<uint16_t> vertexIndices;
+	vertexIndices.reserve(numVertices);
+	for (uint16_t i = 0; i < numVertices; i++) {
+		vertexIndices.push_back(read<uint16_t>());
+	}
+
+	MatchGroup m(numVertices, vertexIndices);
+
+    return m;
 }

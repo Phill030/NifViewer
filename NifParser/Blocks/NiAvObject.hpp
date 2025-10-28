@@ -34,7 +34,6 @@ public:
 private:
 	void readProperties(Reader& reader) {
 		numProperties = reader.read<uint32_t>();
-		printf("Num properties: %d\n", numProperties);
 
 		properties.reserve(numProperties);
 		for (int j = 0; j < numProperties; j++) {
