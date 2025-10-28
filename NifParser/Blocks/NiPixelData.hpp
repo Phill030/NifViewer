@@ -1,8 +1,12 @@
 #pragma once
+#include "../../Types/MipMap.hpp"
+#include "../NifHeader.hpp"
 #include "../Reader.hpp"
-#include "NiPixelFormat.hpp"
-#include "NiPalette.hpp"
 #include "../Types/Ref.hpp"
+#include "NiPalette.hpp"
+#include "NiPixelFormat.hpp"
+#include <cstdint>
+#include <vector>
 
 struct NiPixelData : NiPixelFormat
 {
