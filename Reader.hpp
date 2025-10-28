@@ -13,6 +13,8 @@
 #include "Types/TexCoord.hpp"
 #include "Types/Triangle.hpp"
 #include "Types/MatchGroup.hpp"
+#include "Types/ByteColor4.hpp"
+#include "Types/MipMap.hpp"
 
 class Reader {
 public:
@@ -114,5 +116,24 @@ inline MatchGroup Reader::read<MatchGroup>() {
 
 	MatchGroup m(numVertices, vertexIndices);
 
+    return m;
+}
+
+template<>
+inline ByteColor4 Reader::read<ByteColor4>() {
+    ByteColor4 b;
+	b.r = read<uint8_t>();
+	b.g = read<uint8_t>();
+	b.b = read<uint8_t>();
+    b.a = read<uint8_t>();
+    return b;
+}
+
+template<>
+inline MipMap Reader::read<MipMap>() {
+    MipMap m;
+    m.width = read<uint32_t>();
+    m.height = read<uint32_t>();
+    m.offset = read<uint32_t>();
     return m;
 }
