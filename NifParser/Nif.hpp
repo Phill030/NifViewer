@@ -23,14 +23,14 @@ public:
     NifFile& operator=(NifFile&&) = default;
     NifFile(NifFile&&) = default;
 
-    template<typename t>
-    vector<t*> getBlocksOfType() {
-        static_assert(std::is_base_of_v<NiObject, t>, "t must derive from niobject");
+    template<typename T>
+    vector<T*> getBlocksOfType() {
+        static_assert(std::is_base_of_v<NiObject, T>, "t must derive from niobject");
 
-        std::vector<t*> result;
+        std::vector<T*> result;
 
         for (const auto& obj : blocks) {
-            if (auto* casted = dynamic_cast<t*>(obj.get())) {
+            if (auto* casted = dynamic_cast<T*>(obj.get())) {
                 result.push_back(casted);
             }
         }
