@@ -22,6 +22,7 @@
 #include <gl/GL.h>
 #include <memory>
 #include <string>
+#include <optional>
 
 using namespace std;
 
@@ -157,7 +158,7 @@ void DrawFileNode(KiWadHandler& handler, const vector<KiWadEntry>& entries, ImGu
         if (ImGui::TreeNodeEx(filename.c_str(), baseFlags | ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen)) {
             if (ImGui::IsItemClicked()) {
                 openedFileData = handler.getFileData(e);
-				nif = NifFile(openedFileData);
+                nif = NifFile(openedFileData);
                 openedFileName = filename;
                 showFileWindow = true;
             }
@@ -238,8 +239,6 @@ int main() {
         // Dockspace
         ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 
-
-        // Your custom window
         if (showFileDialog)
             ShowFileDropWindow(&handler, &showFileDialog);
         else {
@@ -252,7 +251,21 @@ int main() {
 
         if (nif) {
             ImGui::Text(openedFileName.c_str());
-            ImGui::Text("NIF Version: %s", nif.value().header.version.toString().c_str());
+            ImGui::Text("NIF Version: %s\n", nif.value().header.version.toString().c_str());
+            
+            auto filtered = nif.value().getBlocksOfType<NiNode>();
+
+            ImGuiListClipper clipper;
+            clipper.Begin(filtered.size());
+
+            while (clipper.Step()) {
+                for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+                    ImGui::Text("%s", filtered[i]->name.c_str());
+                }
+            }
+
+
+            clipper.End();
         }
 
         ImGui::End();
