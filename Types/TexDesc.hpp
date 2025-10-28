@@ -5,6 +5,7 @@
 #include "Ref.hpp"
 #include "TexCoord.hpp"
 #include <cstdint>
+#include <optional>
 
 #define ExcludeVersion(ver) if (header.version.toString() != ver)
 
