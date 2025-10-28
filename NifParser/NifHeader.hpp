@@ -32,6 +32,42 @@ public:
 		patch = (version >> 8) & 0xFF;
 		reserved = version & 0xFF;
 	}
+
+	bool operator==(const Version& other) const {
+		return major == other.major &&
+			minor == other.minor &&
+			patch == other.patch &&
+			reserved == other.reserved;
+	}
+
+	bool operator!=(const Version& other) const {
+		return !(*this == other);
+	}
+
+	bool operator<(const Version& other) const {
+		if (major != other.major)
+			return major < other.major;
+
+		if (minor != other.minor)
+			return minor < other.minor;
+
+		if (patch != other.patch)
+			return patch < other.patch;
+
+		return reserved < other.reserved;
+	}
+
+	bool operator>(const Version& other) const {
+		return other < *this;
+	}
+
+	bool operator<=(const Version& other) const {
+		return !(*this > other);
+	}
+
+	bool operator>=(const Version& other) const {
+		return !(*this < other);
+	}
 };
 
 struct NifHeader

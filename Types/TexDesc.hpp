@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <optional>
 
-#define ExcludeVersion(ver) if (header.version.toString() != ver)
+#define ExcludeVersion(ver) if (header.version !=  ver)
 
 enum class TransformMethod : uint32_t
 {
@@ -49,7 +49,7 @@ public:
 	TexDesc(Reader& reader, const NifHeader& header) : source(Ref<NiSourceTexture>(reader)) {
 		flags = reader.read<uint16_t>();
 
-		ExcludeVersion("20.3.0.9")
+		ExcludeVersion(Version(20, 3, 0, 9))
 			maxAnisotropy = reader.read<uint16_t>();
 
 		hasTextureTransform = reader.read<bool>();
