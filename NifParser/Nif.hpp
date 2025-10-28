@@ -1,13 +1,10 @@
 #pragma once
 #include <vector>
-#include <fstream>
 #include "../Reader.hpp"
-#include <string>
-#include <format>
 #include "NifHeader.hpp"
-#include <optional>
 #include "Blocks/NiObject.hpp"
 #include <memory>
+#include <type_traits>
 
 using namespace std;
 
@@ -25,5 +22,20 @@ public:
     NifFile& operator=(const NifFile&) = delete;
     NifFile& operator=(NifFile&&) = default;
     NifFile(NifFile&&) = default;
+
+    template<typename t>
+    vector<t*> getBlocksOfType() {
+        static_assert(std::is_base_of_v<NiObject, t>, "t must derive from niobject");
+
+        std::vector<t*> result;
+
+        for (const auto& obj : blocks) {
+            if (auto* casted = dynamic_cast<t*>(obj.get())) {
+                result.push_back(casted);
+            }
+        }
+
+        return result;
+    }
 };
 
