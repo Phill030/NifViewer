@@ -1,7 +1,9 @@
+#include "KiWadHandler.hpp"
 #include "Reader.hpp"
-#include <vector>
-#include <cstring>
+#include <cstdint>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 using namespace std;
 
