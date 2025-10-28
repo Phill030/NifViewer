@@ -31,6 +31,5 @@ public:
         for (size_t i = 0; i < numMatchGroups; i++) {
             matchGroups.push_back(reader.read<MatchGroup>());
         }
-        printf("Position: 0x%X\n", reader.tell());
     }
 };

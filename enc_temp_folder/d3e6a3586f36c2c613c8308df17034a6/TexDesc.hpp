@@ -38,7 +38,7 @@ public:
 	Ref<NiSourceTexture> source; // Reference to a NiSourceTexture block
 	uint16_t flags;
 
-	// NOT IN EVERY VERSION 
+	// NOT IN VERSION 
 	uint16_t maxAnisotropy;
 
 	bool hasTextureTransform;
@@ -48,8 +48,7 @@ public:
 		flags = reader.read<uint16_t>();
 
 		// TODO: what the fuck?
-		// MAJOR TODO: Find out why this sometimes works and sometimes not!!!
-		if(header.version.major != 20 && header.version.minor != 3 && header.version.patch != 0 && header.version.reserved != 9)
+		//if(header.version.major != 20 && header.version.minor != 3 && header.version.patch != 0 && header.version.reserved != 9)
 			maxAnisotropy = reader.read<uint16_t>();
 
 		hasTextureTransform = reader.read<bool>();

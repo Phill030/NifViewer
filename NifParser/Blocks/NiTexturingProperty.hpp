@@ -56,7 +56,8 @@ public:
 
 		hasBaseTexture = reader.read<bool>();
 		if(hasBaseTexture)
-			baseTexture = TexDesc(reader, header);
+			baseTexture = TexDesc(reader, header); // ERROR HERE, maxAnistropy has a wrong value??
+
 
 		hasDarkTexture = reader.read<bool>();
 		if(hasDarkTexture)
