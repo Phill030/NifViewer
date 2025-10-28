@@ -1,10 +1,10 @@
 #pragma once
-#include <cstdint>
+#include "../NifParser/Blocks/NiSourceTexture.hpp"
 #include "../NifParser/NifHeader.hpp"
 #include "../Reader.hpp"
-#include "../NifParser/Blocks/NiSourceTexture.hpp"
 #include "Ref.hpp"
 #include "TexCoord.hpp"
+#include <cstdint>
 
 
 enum class TransformMethod : uint32_t
@@ -39,7 +39,7 @@ public:
 	uint16_t flags;
 
 	// NOT IN EVERY VERSION 
-	uint16_t maxAnisotropy;
+	optional<uint16_t> maxAnisotropy;
 
 	bool hasTextureTransform;
 	optional<TextureTransform> textureTransform;
@@ -47,10 +47,10 @@ public:
 	TexDesc(Reader& reader, const NifHeader& header) : source(Ref<NiSourceTexture>(reader)) {
 		flags = reader.read<uint16_t>();
 
-		// TODO: what the fuck?
-		// MAJOR TODO: Find out why this sometimes works and sometimes not!!!
-		if(header.version.major != 20 && header.version.minor != 3 && header.version.patch != 0 && header.version.reserved != 9)
+		if (header.version.toString() != "20.3.0.9") {
 			maxAnisotropy = reader.read<uint16_t>();
+		}
+
 
 		hasTextureTransform = reader.read<bool>();
 		if (hasTextureTransform)
