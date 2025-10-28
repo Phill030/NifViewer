@@ -27,6 +27,6 @@ public:
 		numPixels = reader.read<uint32_t>();
 		numFaces = reader.read<uint32_t>();
 
-		pixelData = reader.read(numPixels);
+		pixelData = reader.read(numPixels * (numFaces > 0 ? numFaces : 1));
 	}
 };
