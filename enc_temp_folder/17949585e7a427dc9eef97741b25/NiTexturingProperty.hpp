@@ -52,11 +52,15 @@ public:
 
 	NiTexturingProperty(Reader& reader, const NifHeader& header): NiProperty(reader, header) {
 		flags = reader.read<uint16_t>();
+		printf("After flags, Current Position: 0x%X\n", reader.tell());
+
 		numTextures = reader.read<uint32_t>();
+		printf("After numTextures Current Position: 0x%X\n", reader.tell());
 
 		hasBaseTexture = reader.read<bool>();
 		if(hasBaseTexture)
 			baseTexture = TexDesc(reader, header);
+		printf("after baseTexture Current Position: 0x%X\n", reader.tell());
 
 		hasDarkTexture = reader.read<bool>();
 		if(hasDarkTexture)
@@ -91,9 +95,13 @@ public:
 		if (hasParallaxTexture)
 			parallaxTexture = TexDesc(reader, header);
 
+		printf("Current Position: 0x%X\n", reader.tell());
+
 		hasDecal0Texture = reader.read<bool>();
 		if (hasDecal0Texture)
 			decal0Texture = TexDesc(reader, header);
+
+		printf("Current Position: 0x%X\n", reader.tell());
 
 		numShaderTextures = reader.read<uint32_t>();
 		shaderTextures.reserve(numShaderTextures);
