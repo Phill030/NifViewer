@@ -18,6 +18,20 @@ public:
 	string toString() const {
 		return format("{}.{}.{}.{}", major, minor, patch, reserved);
 	}
+
+	Version() : major(0), minor(0), patch(0), reserved(0) {}
+	Version(uint8_t major, uint8_t minor, uint8_t patch, uint8_t reserved) {
+		this->major = major;
+		this->minor = minor;
+		this->patch = patch;
+		this->reserved = reserved;
+	}
+	Version(uint32_t version) {
+		major = (version >> 24) & 0xFF;
+		minor = (version >> 16) & 0xFF;
+		patch = (version >> 8) & 0xFF;
+		reserved = version & 0xFF;
+	}
 };
 
 struct NifHeader
@@ -36,16 +50,6 @@ public:
 	vector<string> strings;
 	vector<uint32_t> groups;
 
-	Version readVersion(Reader& reader) const {
-		uint32_t ver = reader.read<uint32_t>();
-		Version v;
-		v.major = (ver >> 24) & 0xFF;
-		v.minor = (ver >> 16) & 0xFF;
-		v.patch = (ver >> 8) & 0xFF;
-		v.reserved = ver & 0xFF;
-		return v;
-	}
-
 	string getIndexString(Reader& reader) const {
 		int32_t stringIndex = reader.read<int32_t>();
 		if (stringIndex == 0xFFFFFFFF) {
@@ -55,10 +59,9 @@ public:
 		return strings[stringIndex];
 	}
 
-	NifHeader() = default;
 	NifHeader(Reader& reader) {
 		header = reader.readUntilNull();
-		version = readVersion(reader);
+		version = Version(reader.read<uint32_t>());
 		endiannes = reader.read<uint8_t>();
 		userVersion = reader.read<uint32_t>();
 		numBlocks = reader.read<uint32_t>();
