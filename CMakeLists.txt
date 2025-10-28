@@ -23,6 +23,9 @@ set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui)
 # zLib
 add_subdirectory(external/zlib)
 
+# GLM
+add_subdirectory(external/glm)
+
 add_library(imgui
     ${IMGUI_DIR}/imgui.cpp
     ${IMGUI_DIR}/imgui_draw.cpp
@@ -64,5 +67,7 @@ endif()
 # Link ImGui, zLib & NifLib to executable
 target_link_libraries(Revive101 PRIVATE imgui)
 target_link_libraries(Revive101 PRIVATE zlibstatic)
+target_link_libraries(Revive101 PRIVATE glm)
+
 
 # TODO: Add tests and install targets if needed.
