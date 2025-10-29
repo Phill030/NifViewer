@@ -58,7 +58,12 @@ add_executable (Revive101
     "Reader.hpp"
     "NifParser/Nif.cpp"
     "NifParser/Nif.hpp"
+    "glad.c"
  )
+
+ target_include_directories(Revive101 PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Revive101 PROPERTY CXX_STANDARD 20)
@@ -68,6 +73,7 @@ endif()
 target_link_libraries(Revive101 PRIVATE imgui)
 target_link_libraries(Revive101 PRIVATE zlibstatic)
 target_link_libraries(Revive101 PRIVATE glm)
+
 
 
 # TODO: Add tests and install targets if needed.
