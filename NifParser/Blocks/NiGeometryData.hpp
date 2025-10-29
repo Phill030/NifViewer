@@ -76,7 +76,6 @@ public:
     float radius;
     
     bool hasVertexColors;
-    // vector3<???> vertexColors    ???
 
 	vector<TexCoord> uvSets;
 	ConsistencyType consistencyFlags;
