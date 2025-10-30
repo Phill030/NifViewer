@@ -15,9 +15,11 @@
 #include "Types/MipMap.hpp"
 #include "Types/Matrix.hpp"
 
+using namespace std;
+
 class Reader {
 public:
-    explicit Reader(const vector<char>& data) : data(&data), pos(0) {}
+    explicit Reader(const vector<uint8_t>& data) : data(&data), pos(0) {}
 
     template<typename T>
     T read();
@@ -29,13 +31,13 @@ public:
     std::string readString(size_t length);
     std::string readString();
     std::string readUntilNull();
-    std::vector<char> readKiWadEntry(KiWadEntry entry);
+    std::vector<uint8_t> readKiWadEntry(KiWadEntry entry);
 
     void seek(size_t newPos);
     size_t tell() const;
 
 private:
-    const std::vector<char>* data;
+    const std::vector<uint8_t>* data;
     size_t pos;
 };
 

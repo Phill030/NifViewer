@@ -19,7 +19,7 @@ public:
     NifHeader header;
     vector<shared_ptr<NiObject>> blocks;
     
-    explicit NifFile(const std::vector<char>& data);
+    explicit NifFile(const vector<uint8_t>& data);
     NifFile(const NifFile&) = delete;
     NifFile& operator=(const NifFile&) = delete;
     NifFile& operator=(NifFile&&) = default;

@@ -47,7 +47,7 @@ string getReadableText(const std::string& input) {
     return result;
 }
 
-NifFile::NifFile(const std::vector<char>& data): reader(data), header(reader) {
+NifFile::NifFile(const std::vector<uint8_t>& data): reader(data), header(reader) {
     const unordered_map<string, function<shared_ptr<NiObject>(Reader&, NifHeader&)>> factories = {
             {"NiNode", [](Reader& r, NifHeader& h) { return make_shared<NiNode>(r, h); }},
             {"NiZBufferProperty", [](Reader& r, NifHeader& h) { return make_shared<NiZBufferProperty>(r, h); }},

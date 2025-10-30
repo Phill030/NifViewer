@@ -29,7 +29,7 @@ public:
 
 class KiWadHandler {
 private:
-    vector<char> fileData;
+    vector<uint8_t> fileData;
     KiWadFile kiwadFile;
 
     inline static const string HEADER = "KIWAD";
@@ -55,7 +55,7 @@ public:
             return filePath;
         return filePath.substr(pos + 1); 
 	}
-    vector<char> getFileData(KiWadEntry entry);
+    vector<uint8_t> getFileData(KiWadEntry entry);
 
     explicit KiWadHandler();
     void processFile(const string& path);

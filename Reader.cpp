@@ -11,7 +11,7 @@ string Reader::readString(size_t length) {
     if (pos + length > data->size())
         throw out_of_range("Read past end of buffer");
 
-    string s(&(*data)[pos], length);
+    string s(reinterpret_cast<const char*>(&(*data)[pos]), length);
     pos += length;
     return s;
 }
@@ -28,7 +28,7 @@ string Reader::readUntilNull() {
     }
     if (pos >= data->size())
         throw out_of_range("Null terminator not found");
-    string s(&(*data)[start], pos - start);
+    string s(reinterpret_cast<const char*>(&(*data)[start]), pos - start);
     pos++; 
     return s;
 }
@@ -41,7 +41,7 @@ vector<uint8_t> Reader::read(uint32_t length) {
     return buf;
 }
 
-vector<char> Reader::readKiWadEntry(KiWadEntry entry) {
+vector<uint8_t> Reader::readKiWadEntry(KiWadEntry entry) {
     if (!data || data->size() == 0)
         throw std::runtime_error("No data buffer");
 
@@ -49,7 +49,7 @@ vector<char> Reader::readKiWadEntry(KiWadEntry entry) {
     if (entry.offset > data->size() || entry.offset + len > data->size())
         throw std::out_of_range("Entry outside buffer");
 
-    return std::vector<char>(data->data() + entry.offset, data->data() + entry.offset + len);
+    return std::vector<uint8_t>(data->data() + entry.offset, data->data() + entry.offset + len);
 }
 
 void Reader::seek(size_t newPos) { pos = newPos; }

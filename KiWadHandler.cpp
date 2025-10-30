@@ -12,10 +12,10 @@
 
 using namespace std;
 
-bool decompress_zlib(const std::vector<char>& compressed, std::vector<char>& decompressed)
+bool decompress_zlib(const vector<uint8_t>& compressed, vector<uint8_t>& decompressed)
 {
     z_stream stream{};
-    stream.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(compressed.data()));
+    stream.next_in = reinterpret_cast<Bytef*>(const_cast<uint8_t*>(compressed.data()));
     stream.avail_in = static_cast<uInt>(compressed.size());
 
     // initialize
@@ -59,8 +59,8 @@ void KiWadHandler::processFile(const string& path) {
     streamsize size = file.tellg();
     file.seekg(0, ios::beg);
 
-    vector<char> buffer(size);
-    if (!file.read(buffer.data(), size)) {
+    vector<uint8_t> buffer(size);
+    if (!file.read(reinterpret_cast<char*>(buffer.data()), size)) {
         throw runtime_error("Error reading file");
     }
 
@@ -110,13 +110,13 @@ void KiWadFile::extractInfo(Reader& reader) {
     }
 }
 
-vector<char> KiWadHandler::getFileData(KiWadEntry entry) {
-	vector<char> entryData = Reader(fileData).readKiWadEntry(entry);
+vector<uint8_t> KiWadHandler::getFileData(KiWadEntry entry) {
+	vector<uint8_t> entryData = Reader(fileData).readKiWadEntry(entry);
     
     if (!entry.zipped)
         return entryData;
 
-    std::vector<char> decompressedData;
+    std::vector<uint8_t> decompressedData;
     if (!decompress_zlib(entryData, decompressedData))
         throw runtime_error("Failed to decompress data.");
 
