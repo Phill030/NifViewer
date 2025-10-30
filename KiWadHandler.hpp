@@ -58,5 +58,5 @@ public:
     vector<char> getFileData(KiWadEntry entry);
 
     explicit KiWadHandler();
-    bool processFile(const string& path);
+    void processFile(const string& path);
 };

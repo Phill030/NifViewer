@@ -47,7 +47,7 @@ bool decompress_zlib(const std::vector<char>& compressed, std::vector<char>& dec
 
 KiWadHandler::KiWadHandler() {}
 
-bool KiWadHandler::processFile(const string& path) {
+void KiWadHandler::processFile(const string& path) {
 
     ifstream file(path, ios::binary);
     if (!file.is_open()) {
@@ -80,8 +80,6 @@ bool KiWadHandler::processFile(const string& path) {
     _kiwadFile.extractInfo(r);
     kiwadFile = move(_kiwadFile);
     filePath = path;
-
-    return true;
 }
 
 // KiWadFile implementation
