@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Reader.hpp"
-#include "../../Types/Matrix22.hpp"
+#include "../../Types/Matrix.hpp"
 #include "../../Types/ShaderTexDesc.hpp"
 #include "../../Types/TexDesc.hpp"
 #include "../NifHeader.hpp"
@@ -36,7 +36,7 @@ public:
 	optional<TexDesc> bumpMapTexture;
 	optional<float> bumpMapLumaScale;
 	optional<float> bumpMapLumaOffset;
-	optional<Matrix22> bumpMapMatrix;
+	optional<Matrix<2,2>> bumpMapMatrix;
 
 	bool hasNormalTexture;
 	optional<TexDesc> normalTexture;
@@ -80,7 +80,7 @@ public:
 			bumpMapTexture = TexDesc(reader, header);
 			bumpMapLumaScale = reader.read<float>();
 			bumpMapLumaOffset = reader.read<float>();
-			bumpMapMatrix = reader.read<Matrix22>();
+			bumpMapMatrix = reader.readMatrix<2,2>();
 		}
 
 

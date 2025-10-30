@@ -7,14 +7,13 @@
 #include <stdexcept>
 #include <cstddef>
 #include "Types/Vector3.hpp"
-#include "Types/Matrix33.hpp"
-#include "Types/Matrix22.hpp"
 #include "Types/Color3.hpp"
 #include "Types/TexCoord.hpp"
 #include "Types/Triangle.hpp"
 #include "Types/MatchGroup.hpp"
 #include "Types/ByteColor4.hpp"
 #include "Types/MipMap.hpp"
+#include "Types/Matrix.hpp"
 
 class Reader {
 public:
@@ -22,6 +21,9 @@ public:
 
     template<typename T>
     T read();
+
+	template<std::size_t N, std::size_t M, typename T = float>
+	Matrix<N, M, T> readMatrix();
 
     std::vector<uint8_t> read(uint32_t length);
     std::string readString(size_t length);
@@ -57,26 +59,16 @@ inline Vector3 Reader::read<Vector3>() {
     return v;
 }
 
-template<>
-inline Matrix33 Reader::read<Matrix33>() {
-    Matrix33 m;
-    for (int r = 0; r < 3; r++) {
-        for (int c = 0; c < 3; c++) {
-            m.m[r][c] = read<float>();
-        }
-    }
-    return m;
-}
 
-template<>
-inline Matrix22 Reader::read<Matrix22>() {
-    Matrix22 m;
-    for (int r = 0; r < 2; r++) {
-        for (int c = 0; c < 2; c++) {
-            m.m[r][c] = read<float>();
+template<std::size_t N, std::size_t M, typename T>
+Matrix<N, M, T> Reader::readMatrix() {
+    Matrix<N, M, T> mat;
+    for (std::size_t i = 0; i < N; ++i) {
+        for (std::size_t j = 0; j < M; ++j) {
+            mat.m[i][j] = read<T>();
         }
     }
-    return m;
+    return mat;
 }
 
 template<>

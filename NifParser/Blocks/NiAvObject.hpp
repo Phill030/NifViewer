@@ -1,12 +1,11 @@
 #pragma once
 #include <cstdint>
 #include "../../Types/Vector3.hpp"
-#include "../../Types/Matrix33.hpp"
 #include "../../Reader.hpp"
 #include "NiObjectNet.hpp"
 #include <vector>
 #include "../NifHeader.hpp"
-#include <cstdio>
+#include "../../Types/Matrix.hpp"
 
 
 using namespace std;
@@ -16,7 +15,7 @@ struct NiAvObject : NiObjectNet
 public:
 	uint16_t flags;
 	Vector3 translation;
-	Matrix33 rotation;
+	Matrix<3,3> rotation;
 	float scale;
 	uint32_t numProperties;
 	vector<uint32_t> properties;
@@ -25,7 +24,7 @@ public:
 	NiAvObject(Reader& reader, const NifHeader& header) : NiObjectNet(reader, header) {
 		flags = reader.read<uint16_t>();
 		translation = reader.read<Vector3>();
-		rotation = reader.read<Matrix33>();
+		rotation = reader.readMatrix<3,3>();
 		scale = reader.read<float>();
 		readProperties(reader);
 		collisionObject = reader.read<int32_t>();
