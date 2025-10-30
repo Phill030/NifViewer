@@ -42,7 +42,7 @@ public:
 	bool shaderMap;
 	TexType textureSlot;
 	TransformMember operation;
-    NiTextureTransformController(Reader& reader) : NiFloatInterpController(reader) {
+    NiTextureTransformController(Reader& reader, const NifHeader& header) : NiFloatInterpController(reader) {
         shaderMap = reader.read<bool>();
         textureSlot = static_cast<TexType>(reader.read<uint32_t>());
         operation = static_cast<TransformMember>(reader.read<uint32_t>());

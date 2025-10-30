@@ -10,7 +10,7 @@ struct NiFloatData : NiObject
 {
 public:
 	KeyGroup<float> data;
-	NiFloatData(Reader& reader) : NiObject() {
+	NiFloatData(Reader& reader, const NifHeader& header) : NiObject() {
 		data.numKeys = reader.read<uint32_t>();
 		data.interpolation = static_cast<KeyType>(reader.read<uint32_t>());
 
