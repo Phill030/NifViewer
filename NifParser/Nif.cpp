@@ -31,6 +31,9 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <functional>
+
 
 using namespace std;
 
@@ -45,108 +48,45 @@ string getReadableText(const std::string& input) {
 }
 
 NifFile::NifFile(const std::vector<char>& data): reader(data), header(reader) {
-    blocks.reserve(header.numBlocks);
+    const unordered_map<string, function<shared_ptr<NiObject>(Reader&, NifHeader&)>> factories = {
+            {"NiNode", [](Reader& r, NifHeader& h) { return make_shared<NiNode>(r, h); }},
+            {"NiZBufferProperty", [](Reader& r, NifHeader& h) { return make_shared<NiZBufferProperty>(r, h); }},
+            {"NiVertexColorProperty", [](Reader& r, NifHeader& h) { return make_shared<NiVertexColorProperty>(r, h); }},
+            {"NiMesh", [](Reader& r, NifHeader& h) { return make_shared<NiMesh>(r, h); }},
+            {"NiTexturingProperty", [](Reader& r, NifHeader& h) { return make_shared<NiTexturingProperty>(r, h); }},
+            {"NiStringExtraData", [](Reader& r, NifHeader& h) { return make_shared<NiStringExtraData>(r, h); }},
+            {"NiMaterialProperty", [](Reader& r, NifHeader& h) { return make_shared<NiMaterialProperty>(r, h); }},
+            {"NiDataStream", [](Reader& r, NifHeader& h) { return make_shared<NiDataStream>(r, h); }},
+            {"NiSourceTexture", [](Reader& r, NifHeader& h) { return make_shared<NiSourceTexture>(r, h); }},
+            {"NiAlphaProperty", [](Reader& r, NifHeader& h) { return make_shared<NiAlphaProperty>(r, h); }},
+            {"NiSpecularProperty", [](Reader& r, NifHeader& h) { return make_shared<NiSpecularProperty>(r, h); }},
+            {"NiStencilProperty", [](Reader& r, NifHeader& h) { return make_shared<NiStencilProperty>(r, h); }},
+            {"NiTextureTransformController", [](Reader& r, NifHeader& h) { return make_shared<NiTextureTransformController>(r, h); }},
+            {"NiFloatInterpolator", [](Reader& r, NifHeader& h) { return make_shared<NiFloatInterpolator>(r, h); }},
+            {"NiFloatData", [](Reader& r, NifHeader& h) { return make_shared<NiFloatData>(r, h); }},
+            {"NiMorphWeightsController", [](Reader& r, NifHeader& h) { return make_shared<NiMorphWeightsController>(r, h); }},
+            {"NiBillboardNode", [](Reader& r, NifHeader& h) { return make_shared<NiBillboardNode>(r, h); }},
+            {"NiBooleanExtraData", [](Reader& r, NifHeader& h) { return make_shared<NiBooleanExtraData>(r, h); }},
+            {"NiIntegerExtraData", [](Reader& r, NifHeader& h) { return make_shared<NiIntegerExtraData>(r, h); }},
+            {"NiIntegersExtraData", [](Reader& r, NifHeader& h) { return make_shared<NiIntegersExtraData>(r, h); }},
+            {"NiTriShape", [](Reader& r, NifHeader& h) { return make_shared<NiTriShape>(r, h); }},
+            {"NiTriShapeData", [](Reader& r, NifHeader& h) { return make_shared<NiTriShapeData>(r, h); }},
+            {"NiPixelData", [](Reader& r, NifHeader& h) { return make_shared<NiPixelData>(r, h); }},
+    };
 
-    for (uint32_t i = 0; i < header.numBlocks; i++) {
+    for (uint32_t i = 0; i < header.numBlocks; ++i) {
         string blockType = getReadableText(header.blockTypes[header.blockTypeIndex[i]]);
         uint32_t blockSize = header.blockSize[i];
 
-		printf("Current index: %d, blockType: %s\n", i, blockType.c_str());
-        if (blockType == "NiNode") {
-            shared_ptr<NiNode> node = make_shared<NiNode>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiZBufferProperty") {
-            shared_ptr<NiZBufferProperty> node = make_shared<NiZBufferProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiVertexColorProperty") {
-            shared_ptr<NiVertexColorProperty> node = make_shared<NiVertexColorProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiMesh") {
-			shared_ptr<NiMesh> node = make_shared<NiMesh>(reader, header);
-			blocks.push_back(node);
-        }
-        else if (blockType == "NiTexturingProperty") {
-            shared_ptr<NiTexturingProperty> node = make_shared<NiTexturingProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiStringExtraData") {
-            shared_ptr<NiStringExtraData> node = make_shared<NiStringExtraData>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiMaterialProperty") {
-            shared_ptr<NiMaterialProperty> node = make_shared<NiMaterialProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiDataStream") {
-            shared_ptr<NiDataStream> node = make_shared<NiDataStream>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiSourceTexture") {
-            shared_ptr<NiSourceTexture> node = make_shared<NiSourceTexture>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiAlphaProperty") {
-            shared_ptr<NiAlphaProperty> node = make_shared<NiAlphaProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiSpecularProperty") {
-            shared_ptr<NiSpecularProperty> node = make_shared<NiSpecularProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiStencilProperty") {
-            shared_ptr<NiStencilProperty> node = make_shared<NiStencilProperty>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiTextureTransformController") {
-            shared_ptr<NiTextureTransformController> node = make_shared<NiTextureTransformController>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiFloatInterpolator") {
-            shared_ptr<NiFloatInterpolator> node = make_shared<NiFloatInterpolator>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiFloatData") {
-            shared_ptr<NiFloatData> node = make_shared<NiFloatData>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiMorphWeightsController") {
-            shared_ptr<NiMorphWeightsController> node = make_shared<NiMorphWeightsController>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiBillboardNode") {
-            shared_ptr<NiBillboardNode> node = make_shared<NiBillboardNode>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiBooleanExtraData") {
-            shared_ptr<NiBooleanExtraData> node = make_shared<NiBooleanExtraData>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiIntegerExtraData") {
-            shared_ptr<NiIntegerExtraData> node = make_shared<NiIntegerExtraData>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiIntegersExtraData") {
-            shared_ptr<NiIntegersExtraData> node = make_shared<NiIntegersExtraData>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiTriShape") {
-            shared_ptr<NiTriShape> node = make_shared<NiTriShape>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiTriShapeData") {
-            shared_ptr<NiTriShapeData> node = make_shared<NiTriShapeData>(reader, header);
-            blocks.push_back(node);
-        }
-        else if (blockType == "NiPixelData") {
-            shared_ptr<NiPixelData> node = make_shared<NiPixelData>(reader, header);
-            blocks.push_back(node);
+        printf("Current index: %u, blockType: %s\n", i, blockType.c_str());
+
+        auto it = factories.find(blockType);
+        if (it != factories.end()) {
+            blocks.push_back(it->second(reader, header));
         }
         else {
             printf("Unknown block type: %s\n", blockType.c_str());
-			reader.read(blockSize);
+            reader.read(blockSize);
         }
     }
 }
