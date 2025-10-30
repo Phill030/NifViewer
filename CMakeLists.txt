@@ -52,12 +52,6 @@ target_link_libraries(imgui PUBLIC
 add_executable (Revive101 
     "Revive101.cpp"
     "Revive101.h"
-    "KiWadHandler.cpp"
-    "KiWadHandler.hpp"
-    "Reader.cpp"
-    "Reader.hpp"
-    "NifParser/Nif.cpp"
-    "NifParser/Nif.hpp"
     "glad.c"
  )
 
