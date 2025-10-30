@@ -110,7 +110,6 @@ public:
 
 
 		hasVertexColors = reader.read<bool>();
-        // vector of vertex colors?
 
         for (size_t i = 0; i < numVertices; i++) {
 			uvSets.push_back(reader.read<TexCoord>());
