@@ -101,15 +101,15 @@ NifFile::NifFile(const std::vector<char>& data): reader(data), header(reader) {
             blocks.push_back(node);
         }
         else if (blockType == "NiTextureTransformController") {
-            shared_ptr<NiTextureTransformController> node = make_shared<NiTextureTransformController>(reader);
+            shared_ptr<NiTextureTransformController> node = make_shared<NiTextureTransformController>(reader, header);
             blocks.push_back(node);
         }
         else if (blockType == "NiFloatInterpolator") {
-            shared_ptr<NiFloatInterpolator> node = make_shared<NiFloatInterpolator>(reader);
+            shared_ptr<NiFloatInterpolator> node = make_shared<NiFloatInterpolator>(reader, header);
             blocks.push_back(node);
         }
         else if (blockType == "NiFloatData") {
-            shared_ptr<NiFloatData> node = make_shared<NiFloatData>(reader);
+            shared_ptr<NiFloatData> node = make_shared<NiFloatData>(reader, header);
             blocks.push_back(node);
         }
         else if (blockType == "NiMorphWeightsController") {
