@@ -1,11 +1,11 @@
 #pragma once
+#include "../../Reader.hpp"
+#include "../NifHeader.hpp"
+#include "NiAvObject.hpp"
+#include "NiDynamicEffect.hpp"
+#include "../../Types/Ref.hpp"
 #include <cstdint>
 #include <vector>
-#include "../../Reader.hpp"
-#include "NiAvObject.hpp"
-#include "../NifHeader.hpp"
-#include "../../Types/Ref.hpp";
-#include "NiDynamicEffect.hpp"
 
 using namespace std;
 
