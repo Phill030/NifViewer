@@ -6,7 +6,6 @@
 #include <memory>
 #include <type_traits>
 #include "Blocks/NiNode.hpp"
-#include "../Types/Ref.hpp"
 
 using namespace std;
 
@@ -51,19 +50,16 @@ public:
 
 		return roots;
     }
-
-    template<typename T>
-    T* getReference(const Ref<T>& ref) const {
-        static_assert(std::is_base_of_v<NiObject, T>, "T must derive from NiObject");
-
-        if (ref.value == -1)
-            return nullptr;
-
-        if (ref.value < 0 || static_cast<size_t>(ref.value) >= blocks.size())
-            return nullptr;
-
-        NiObject* obj = blocks[ref.value].get();
-		return dynamic_cast<T*>(obj);
-    }
 };
 
+// NifFile is now fully defined
+template <typename T>
+T* Ref<T>::getReference(const NifFile& file) const {
+    if (value == -1)
+        return nullptr;
+
+    if (value < 0 || static_cast<size_t>(value) >= file.blocks.size())
+        return nullptr;
+
+    return dynamic_cast<T*>(file.blocks[value].get());
+}
