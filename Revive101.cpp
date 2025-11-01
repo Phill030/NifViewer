@@ -221,8 +221,8 @@ int main() {
             ui.ShowFilesMenu();
 
         // ----------------------------------------------------------------------
-// 3D PREVIEW WINDOW WITH CONTROLS
-// ----------------------------------------------------------------------
+        // 3D PREVIEW WINDOW WITH CONTROLS
+        // ----------------------------------------------------------------------
 
         static float sphereRadius = 1.0f;
         static float rotationSpeed = 1.0f;
@@ -243,7 +243,6 @@ int main() {
         ImGui::ColorEdit3("Background", (float*)&backgroundColor);
         ImGui::SliderFloat("Resolution Scale", &resolutionScale, 0.5f, 2.0f, "%.1fx");
 
-        // Spacer
         ImGui::Separator();
         ImGui::Text("Preview:");
 
