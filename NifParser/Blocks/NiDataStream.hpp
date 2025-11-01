@@ -1,11 +1,13 @@
 #pragma once
 #include "../../Reader.hpp"
-#include "../../Types/Ref.hpp"
+#include "../Nif.hpp"
 #include "../NifHeader.hpp"
 #include "NiObject.hpp"
 #include <cstdint>
 #include <string>
 #include <vector>
+#include "DataStream/DataStreamData.hpp"
+
 
 using namespace std;
 
@@ -142,7 +144,10 @@ public:
     uint32_t numComponents;
 	vector<ComponentFormat> componentFormats;
     vector<uint8_t> data;
-    bool streamable;
+    bool streamable; 
+
+    // Later constructed
+    vector<DataStreamData> semanticData;
 
     NiDataStream(Reader& reader, NifHeader& header) {
         numBytes = reader.read<uint32_t>();
@@ -158,7 +163,7 @@ public:
             componentFormats.push_back(static_cast<ComponentFormat>(reader.read<uint32_t>()));
 		}
 
-        data = reader.read(numBytes); // Use your existing read(length) method
+        data = reader.read(numBytes);
 
 		streamable = reader.read<bool>();
     }
@@ -167,7 +172,7 @@ public:
 struct DataStreamRef
 {
 public:
-	Ref<NiDataStream> stream; // Reference to a NiDataStream
+	Ref<NiDataStream> stream;
     bool isPerInstance; // Sets whether this stream data is per-instance data for use in hardware instancing.
     uint16_t numSubmeshes; // The number of submesh-to-region mappings that this data stream has.
 	vector<uint16_t> submeshToRegionMap;
