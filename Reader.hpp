@@ -11,7 +11,7 @@
 #include "Types/TexCoord.hpp"
 #include "Types/Triangle.hpp"
 #include "Types/MatchGroup.hpp"
-#include "Types/ByteColor4.hpp"
+#include "Types/Color4.hpp"
 #include "Types/MipMap.hpp"
 #include "Types/Matrix.hpp"
 
@@ -114,8 +114,8 @@ inline MatchGroup Reader::read<MatchGroup>() {
 }
 
 template<>
-inline ByteColor4 Reader::read<ByteColor4>() {
-    ByteColor4 b;
+inline Color4 Reader::read<Color4>() {
+    Color4 b;
 	b.r = read<uint8_t>();
 	b.g = read<uint8_t>();
 	b.b = read<uint8_t>();
