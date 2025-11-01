@@ -131,7 +131,7 @@ NifFile::NifFile(const std::vector<uint8_t>& data) : reader(data), header(reader
                                 dataStream->semanticData.push_back(DataStreamTexcoord{ tex.u, tex.v });
                             }
                         }
-                        else if (semantic.name == "COLOR") {
+                        else if (semantic.name == "COLOR") { // TODO: is this Color4??
                             while (r.tell() + sizeof(Color3) <= dataStream->numBytes) {
                                 Color3 color = r.read<Color3>();
                                 dataStream->semanticData.push_back(DataStreamColor{ color.r, color.g, color.b });
@@ -142,7 +142,7 @@ NifFile::NifFile(const std::vector<uint8_t>& data) : reader(data), header(reader
                                 uint16_t index = r.read<uint16_t>();
                                 dataStream->semanticData.push_back(DataStreamIndex(index));
                             }
-                        }
+                        } // TOOD: implement rest
                     }
                 }
             }

@@ -147,7 +147,7 @@ public:
     bool streamable; 
 
     // Later constructed
-    vector<DataStreamData> semanticData;
+    vector<DataStreamData> semanticData; // TODO: this should only be one DataStreamData which contains multiple variables
 
     NiDataStream(Reader& reader, NifHeader& header) {
         numBytes = reader.read<uint32_t>();

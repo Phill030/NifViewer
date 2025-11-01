@@ -16,9 +16,9 @@
 #include <format>
 #include "NifParser/Blocks/NiDataStream.hpp"
 #include "NifParser/Blocks/NiMesh.hpp"
+#include "NifParser/Blocks/DataStream/DataStreamPosition.hpp"
 #include <cstring>
-#include <cstdio>
-#include "NifParser/Blocks/DataStream/DataStreamData.hpp"
+#include <type_traits>
 
 static std::vector<std::string> droppedFiles;
 void drop_callback(GLFWwindow* window, int count, const char** paths) {
@@ -202,19 +202,6 @@ public:
             ImGui::Text(openedFileName.c_str());
             ImGui::Text("NIF Version: %s\n", nifFile.value().header.version.toString().c_str());
 
-            auto filtered = nifFile.value().getBlocksOfType<NiMesh>();
-
-            for (const auto& mesh : filtered) {
-                for (const auto& dataStreamRef : mesh->dataStreams) {
-					auto stream = dataStreamRef.stream.getReference(nifFile.value());
-                    if (stream == nullptr)
-						continue;
-
-                    for (const auto& semanticData : stream->semanticData) {
-                        ImGui::Text("Mesh Data Stream Semantic: %s", typeid(semanticData).name());
-                    }
-                }
-            }
             ImGui::End();
         }
     }
