@@ -33,6 +33,12 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
+#include "Blocks/DataStream/DataStreamData.hpp"
+#include "Blocks/DataStream/DataStreamPosition.hpp"
+#include "Blocks/DataStream/DataStreamNormal.hpp"
+#include "Blocks/DataStream/DataStreamTexcoord.hpp"
+#include "Blocks/DataStream/DataStreamIndex.hpp"
+#include "Blocks/DataStream/DataStreamColor.hpp"
 
 
 using namespace std;
@@ -47,7 +53,7 @@ string getReadableText(const std::string& input) {
     return result;
 }
 
-NifFile::NifFile(const std::vector<uint8_t>& data): reader(data), header(reader) {
+NifFile::NifFile(const std::vector<uint8_t>& data) : reader(data), header(reader) {
     const unordered_map<string, function<shared_ptr<NiObject>(Reader&, NifHeader&)>> factories = {
             {"NiNode", [](Reader& r, NifHeader& h) { return make_shared<NiNode>(r, h); }},
             {"NiZBufferProperty", [](Reader& r, NifHeader& h) { return make_shared<NiZBufferProperty>(r, h); }},
@@ -76,7 +82,6 @@ NifFile::NifFile(const std::vector<uint8_t>& data): reader(data), header(reader)
 
     for (uint32_t i = 0; i < header.numBlocks; ++i) {
         string blockType = getReadableText(header.blockTypes[header.blockTypeIndex[i]]);
-        uint32_t blockSize = header.blockSize[i];
 
         printf("Current index: %u, blockType: %s\n", i, blockType.c_str());
 
@@ -86,7 +91,61 @@ NifFile::NifFile(const std::vector<uint8_t>& data): reader(data), header(reader)
         }
         else {
             printf("Unknown block type: %s\n", blockType.c_str());
+            uint32_t blockSize = header.blockSize[i];
             reader.read(blockSize);
+        }
+    }
+
+    for (auto& block : blocks) {
+        if (!block) {
+            printf("Null block encountered!\n");
+            continue;
+        }
+
+        if (const auto& niMesh = dynamic_pointer_cast<NiMesh>(block)) {
+            if (!niMesh) continue;
+
+            for (const auto& dataStreamRef : niMesh->dataStreams) {
+                for (const auto& semantic : dataStreamRef.componentSemantics) {
+                    auto dataStream = dataStreamRef.stream.getReference(*this);
+                    if (dataStream == nullptr) continue;
+
+                    for (const auto& semantic : dataStreamRef.componentSemantics) {
+                        Reader r(dataStream->data);
+
+                        if (semantic.name == "POSITION") {
+                            while (r.tell() + sizeof(Vector3) <= dataStream->numBytes) {
+                                Vector3 vec = r.read<Vector3>();
+                                dataStream->semanticData.push_back(DataStreamPosition{ vec.x, vec.y, vec.z });
+                            }
+                        }
+                        else if (semantic.name == "NORMAL") {
+                            while (r.tell() + sizeof(Vector3) <= dataStream->numBytes) {
+                                Vector3 vec = r.read<Vector3>();
+                                dataStream->semanticData.push_back(DataStreamNormal{ vec.x, vec.y, vec.z });
+                            }
+                        }
+                        else if (semantic.name == "TEXCOORD") {
+                            while (r.tell() + sizeof(TexCoord) <= dataStream->numBytes) {
+                                TexCoord tex = r.read<TexCoord>();
+                                dataStream->semanticData.push_back(DataStreamTexcoord{ tex.u, tex.v });
+                            }
+                        }
+                        else if (semantic.name == "COLOR") {
+                            while (r.tell() + sizeof(Color3) <= dataStream->numBytes) {
+                                Color3 color = r.read<Color3>();
+                                dataStream->semanticData.push_back(DataStreamColor{ color.r, color.g, color.b });
+                            }
+                        }
+                        else if (semantic.name == "INDEX") {
+                            while (r.tell() + sizeof(uint16_t) <= dataStream->numBytes) {
+                                uint16_t index = r.read<uint16_t>();
+                                dataStream->semanticData.push_back(DataStreamIndex(index));
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
