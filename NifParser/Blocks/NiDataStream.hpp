@@ -1,12 +1,13 @@
 #pragma once
 #include "../../Reader.hpp"
-#include "../Nif.hpp"
 #include "../NifHeader.hpp"
 #include "NiObject.hpp"
 #include <cstdint>
 #include <string>
 #include <vector>
 #include "DataStream/DataStreamData.hpp"
+#include <memory>
+#include "../../Types/Ref.hpp"
 
 
 using namespace std;
@@ -147,7 +148,10 @@ public:
     bool streamable; 
 
     // Later constructed
-    vector<DataStreamData> semanticData; // TODO: this should only be one DataStreamData which contains multiple variables
+	/// <summary>
+	/// The parsed semantic data from this data stream.
+	/// </summary>
+    vector<unique_ptr<DataStreamData>> semanticData;
 
     NiDataStream(Reader& reader, NifHeader& header) {
         numBytes = reader.read<uint32_t>();

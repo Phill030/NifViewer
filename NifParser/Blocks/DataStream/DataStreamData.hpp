@@ -2,5 +2,6 @@
 
 struct DataStreamData
 {
-
+public:
+	virtual ~DataStreamData() = default;
 };

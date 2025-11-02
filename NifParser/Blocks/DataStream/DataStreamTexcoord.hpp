@@ -1,7 +1,11 @@
 #pragma once
 #include "DataStreamData.hpp"
 #include "../../Types/TexCoord.hpp"
-struct DataStreamTexcoord : DataStreamData, TexCoord
+#include <vector>
+
+struct DataStreamTexcoord : DataStreamData
 {
-    using TexCoord::TexCoord;
+public:
+	using value_type = TexCoord;
+	vector<TexCoord> values;
 };

@@ -19,6 +19,10 @@
 #include "NifParser/Blocks/DataStream/DataStreamPosition.hpp"
 #include <cstring>
 #include <type_traits>
+#include "NifParser/Blocks/DataStream/DataStreamColor.hpp"
+#include "NifParser/Blocks/DataStream/DataStreamNormal.hpp"
+#include "NifParser/Blocks/DataStream/DataStreamIndex.hpp"
+#include "NifParser/Blocks/DataStream/DataStreamTexcoord.hpp"
 
 static std::vector<std::string> droppedFiles;
 void drop_callback(GLFWwindow* window, int count, const char** paths) {
@@ -201,6 +205,29 @@ public:
 
             ImGui::Text(openedFileName.c_str());
             ImGui::Text("NIF Version: %s\n", nifFile.value().header.version.toString().c_str());
+
+            auto filtered = nifFile.value().getBlocksOfType<NiMesh>();
+			ImGui::Text("Meshes in file: %zu", filtered.size());
+            for (const auto& mesh : filtered) {
+                for (const auto& streamRef : mesh->dataStreams) {
+                    auto stream = streamRef.stream.getReference(nifFile.value());
+                    if(stream == nullptr) continue;
+                    for (const auto& semantic : stream->semanticData) {
+                        if (auto index = dynamic_cast<DataStreamIndex*>(semantic.get()))
+                            ImGui::Text(" - Index Data Stream: %zu indices", index->values.size());
+                        else if (auto normal = dynamic_cast<DataStreamNormal*>(semantic.get()))
+                            ImGui::Text(" - Normal Data Stream: %zu normals", normal->values.size());
+                        else if (auto color = dynamic_cast<DataStreamColor*>(semantic.get()))
+                            ImGui::Text(" - Color Data Stream: %zu colors", color->values.size());
+                        else if (auto position = dynamic_cast<DataStreamPosition*>(semantic.get()))
+                            ImGui::Text(" - Position Data Stream: %zu positions", position->values.size());
+                        else if (auto position = dynamic_cast<DataStreamTexcoord*>(semantic.get()))
+							ImGui::Text(" - TexCoord Data Stream: %zu texcoords", position->values.size());
+
+
+                    }
+                }
+            }
 
             ImGui::End();
         }

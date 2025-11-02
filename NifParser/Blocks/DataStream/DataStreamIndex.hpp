@@ -1,10 +1,11 @@
 #pragma once
 #include "DataStreamData.hpp"
 #include <cstdint>
+#include <vector>
 
 struct DataStreamIndex : DataStreamData
 {
 public:
-	uint16_t value;
-	explicit DataStreamIndex(uint16_t val) : value(val) {}
+	using value_type = uint16_t;
+	vector<uint16_t> values;
 };

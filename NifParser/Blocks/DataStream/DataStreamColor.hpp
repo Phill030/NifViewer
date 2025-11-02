@@ -1,8 +1,11 @@
 #pragma once
 #include "DataStreamData.hpp"
-#include "../../Types/Color3.hpp"
+#include "../../Types/Color4.hpp"
+#include <vector>
 
-struct DataStreamColor : DataStreamData, Color3
+struct DataStreamColor : DataStreamData
 {
-	using Color3::Color3;
+public:
+	using value_type = Color4;
+	vector<Color4> values;
 };

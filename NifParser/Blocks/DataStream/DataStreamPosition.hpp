@@ -1,7 +1,11 @@
 #pragma once
 #include "DataStreamData.hpp"
 #include "../../Types/Vector3.hpp"
-struct DataStreamPosition : DataStreamData, Vector3
+#include <vector>
+
+struct DataStreamPosition : DataStreamData
 {
-    using Vector3::Vector3; // inherit constructors
+public: 
+	using value_type = Vector3;
+	vector<Vector3> values;
 };

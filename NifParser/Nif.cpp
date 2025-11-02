@@ -40,8 +40,21 @@
 #include "Blocks/DataStream/DataStreamIndex.hpp"
 #include "Blocks/DataStream/DataStreamColor.hpp"
 
-
 using namespace std;
+
+template<typename T>
+void addStreamValue(std::vector<std::unique_ptr<DataStreamData>>& streams, const typename T::value_type& value) {
+    for (auto& stream : streams) {
+        if (auto typed_stream = dynamic_cast<T*>(stream.get())) {
+            typed_stream->values.push_back(value);
+            return;
+        }
+    }
+
+    auto new_stream = std::make_unique<T>();
+    new_stream->values.push_back(value);
+    streams.push_back(std::move(new_stream));
+}
 
 string getReadableText(const std::string& input) {
     string result;
@@ -116,31 +129,31 @@ NifFile::NifFile(const std::vector<uint8_t>& data) : reader(data), header(reader
                         if (semantic.name == "POSITION") {
                             while (r.tell() + sizeof(Vector3) <= dataStream->numBytes) {
                                 Vector3 vec = r.read<Vector3>();
-                                dataStream->semanticData.push_back(DataStreamPosition{ vec.x, vec.y, vec.z });
+								addStreamValue<DataStreamPosition>(dataStream->semanticData, vec);
                             }
                         }
                         else if (semantic.name == "NORMAL") {
                             while (r.tell() + sizeof(Vector3) <= dataStream->numBytes) {
                                 Vector3 vec = r.read<Vector3>();
-                                dataStream->semanticData.push_back(DataStreamNormal{ vec.x, vec.y, vec.z });
+                                addStreamValue<DataStreamNormal>(dataStream->semanticData, vec);
                             }
                         }
                         else if (semantic.name == "TEXCOORD") {
                             while (r.tell() + sizeof(TexCoord) <= dataStream->numBytes) {
                                 TexCoord tex = r.read<TexCoord>();
-                                dataStream->semanticData.push_back(DataStreamTexcoord{ tex.u, tex.v });
+                                addStreamValue<DataStreamTexcoord>(dataStream->semanticData, tex);
                             }
                         }
-                        else if (semantic.name == "COLOR") { // TODO: is this Color4??
-                            while (r.tell() + sizeof(Color3) <= dataStream->numBytes) {
-                                Color3 color = r.read<Color3>();
-                                dataStream->semanticData.push_back(DataStreamColor{ color.r, color.g, color.b });
+                        else if (semantic.name == "COLOR") {
+                            while (r.tell() + sizeof(Color4) <= dataStream->numBytes) {
+                                Color4 color = r.read<Color4>();
+                                addStreamValue<DataStreamColor>(dataStream->semanticData, color);
                             }
                         }
                         else if (semantic.name == "INDEX") {
                             while (r.tell() + sizeof(uint16_t) <= dataStream->numBytes) {
                                 uint16_t index = r.read<uint16_t>();
-                                dataStream->semanticData.push_back(DataStreamIndex(index));
+                                addStreamValue<DataStreamIndex>(dataStream->semanticData, index);
                             }
                         } // TOOD: implement rest
                     }

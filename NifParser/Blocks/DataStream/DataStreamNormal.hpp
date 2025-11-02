@@ -1,7 +1,10 @@
 #pragma once
 #include "DataStreamData.hpp"
 #include "../../Types/Vector3.hpp"
-struct DataStreamNormal : DataStreamData, Vector3
+
+struct DataStreamNormal : DataStreamData
 {
-    using Vector3::Vector3;
+public:
+	using value_type = Vector3;
+	vector<Vector3> values;
 };
