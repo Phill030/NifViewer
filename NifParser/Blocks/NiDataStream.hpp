@@ -149,7 +149,7 @@ public:
 
     // Later constructed
 	/// <summary>
-	/// The parsed semantic data from this data stream.
+	/// CUSTOM: The parsed semantic data from this data stream.
 	/// </summary>
     vector<unique_ptr<DataStreamData>> semanticData;
 

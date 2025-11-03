@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// This class adds (N)ames, (E)xtra Data, and (T)ime controllers to NiObject.
 struct NiObjectNet : NiObject
 {
 public:
