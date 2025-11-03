@@ -13,31 +13,31 @@ public:
 	uint8_t major;
 	uint8_t minor;
 	uint8_t patch;
-	uint8_t reserved;
+	uint8_t build;
 
 	string toString() const {
-		return format("{}.{}.{}.{}", major, minor, patch, reserved);
+		return format("{}.{}.{}.{}", major, minor, patch, build);
 	}
 
-	Version() : major(0), minor(0), patch(0), reserved(0) {}
-	Version(uint8_t major, uint8_t minor, uint8_t patch, uint8_t reserved) {
+	Version() : major(0), minor(0), patch(0), build(0) {}
+	Version(uint8_t major, uint8_t minor, uint8_t patch, uint8_t build) {
 		this->major = major;
 		this->minor = minor;
 		this->patch = patch;
-		this->reserved = reserved;
+		this->build = build;
 	}
 	Version(uint32_t version) {
 		major = (version >> 24) & 0xFF;
 		minor = (version >> 16) & 0xFF;
 		patch = (version >> 8) & 0xFF;
-		reserved = version & 0xFF;
+		build = version & 0xFF;
 	}
 
 	bool operator==(const Version& other) const {
 		return major == other.major &&
 			minor == other.minor &&
 			patch == other.patch &&
-			reserved == other.reserved;
+			build == other.build;
 	}
 
 	bool operator!=(const Version& other) const {
@@ -54,7 +54,7 @@ public:
 		if (patch != other.patch)
 			return patch < other.patch;
 
-		return reserved < other.reserved;
+		return build < other.build;
 	}
 
 	bool operator>(const Version& other) const {
