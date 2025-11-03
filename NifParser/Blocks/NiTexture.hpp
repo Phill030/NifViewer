@@ -31,17 +31,17 @@ enum class PixelLayout : uint32_t
 // Describes how mipmaps are handled in an NiTexture. 
 enum class MipMapFormat : uint32_t
 {
-    MIP_FMT_NO = 0,       // Texture does not use mip maps.
-    MIP_FMT_YES = 1,      // Texture uses mip maps.
-    MIP_FMT_DEFAULT = 2   // Use default setting.
+    NO = 0,       // Texture does not use mip maps.
+    YES = 1,      // Texture uses mip maps.
+    MIP_DEFAULT = 2   // Use default setting.
 };
 
 // Describes how transparency (alpha) is handled in an NiTexture.
 enum class AlphaFormat : uint32_t
 {
-    ALPHA_NONE = 0,     // No alpha.
-    ALPHA_BINARY = 1,   // 1-bit alpha.
-    ALPHA_SMOOTH = 2,   // Interpolated 4- or 8-bit alpha.
+    NONE = 0,     // No alpha.
+    BINARY = 1,   // 1-bit alpha.
+    SMOOTH = 2,   // Interpolated 4- or 8-bit alpha.
     ALPHA_DEFAULT = 3   // Use default setting.
 };
 

@@ -7,9 +7,9 @@
 enum LightningMode : uint32_t
 {
 	// Only the emissive component of the lighting equation is used. No dynamic lights are considered in the lighting process
-	Emissive = 0,
+	LIGHTING_E = 0,
 	// The emissive, ambient, and diffuse components of the lighting equation are all used.
-	EmissiveAmbientDiffuse = 1
+	LIGHTING_E_A_D = 1,
 };
 
 enum VertexMode : uint16_t
